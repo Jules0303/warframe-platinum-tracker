@@ -36,6 +36,40 @@ export function getItemUrlName(name: string): string {
   return urlName;
 }
 
+// Heuristique automatique : Les reliques actives sont celles contenant des pièces
+// de Warframes ou d'armes Prime qui ne sont pas archivées (Vaultées).
+// Il suffit de maintenir cette liste simplifiée des Warframes actives pour classer automatiquement les centaines de reliques.
+const UNVAULTED_SETS = [
+  "sevagoth",
+  "gauss",
+  "protea",
+  "wisp",
+  "hildryn",
+  "khora",
+  "baruuk",
+  "revenant",
+  "epitaph",
+  "acceltra",
+  "akarius",
+  "fulmin",
+  "larkspur",
+  "velox",
+  "shade",
+  "cobra",
+  "okina",
+  "hystrix",
+  "dual_keres",
+  "afentis"
+];
+
+const RESURGENCE_SETS = [
+  "volt",
+  "saryn",
+  "nekros",
+  "dakra",
+  "carrier"
+];
+
 export async function fetchAllRelics(staticRelics: Relic[]): Promise<Relic[]> {
   try {
     const response = await fetch(
@@ -66,11 +100,21 @@ export async function fetchAllRelics(staticRelics: Relic[]): Promise<Relic[]> {
         };
       });
 
-      // Find status from our static unvaulted/resurgence list
-      const staticMatch = staticRelics.find(
-        (sr) => sr.era === era && sr.name.toLowerCase() === name.toLowerCase()
+      // Détection automatique du statut basée sur le contenu de la relique
+      let status: "Unvaulted" | "Resurgence" | "Vaulted" = "Vaulted";
+      
+      const hasUnvaultedDrop = drops.some((d) => 
+        UNVAULTED_SETS.some((set) => d.urlName.includes(set))
       );
-      const status = staticMatch ? staticMatch.status : "Vaulted";
+      const hasResurgenceDrop = drops.some((d) => 
+        RESURGENCE_SETS.some((set) => d.urlName.includes(set))
+      );
+
+      if (hasUnvaultedDrop) {
+        status = "Unvaulted";
+      } else if (hasResurgenceDrop) {
+        status = "Resurgence";
+      }
 
       return {
         era,
