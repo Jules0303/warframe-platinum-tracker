@@ -10,21 +10,49 @@ interface RelicTrackerProps {
 export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice }) => {
   const [hideVaulted, setHideVaulted] = useState<boolean>(true);
   const [selectedRelic, setSelectedRelic] = useState<Relic>(RELICS[0]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Filtrer les reliques selon le statut
-  const visibleRelics = RELICS.filter((relic) => !hideVaulted || relic.status !== "Vaulted");
+  const selectRelic = (relic: Relic) => setSelectedRelic(relic);
 
-  // Sécurité si la relique sélectionnée a été filtrée
-  const activeRelic = visibleRelics.some((r) => r.name === selectedRelic.name)
-    ? selectedRelic
-    : visibleRelics[0] || RELICS[0];
+  // Filtrer les reliques selon la recherche et le statut vaulted
+  const visibleRelics = RELICS.filter((relic) => {
+    const matchesSearch = 
+      relic.era.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      relic.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesVaulted = !hideVaulted || relic.status !== "Vaulted";
+    return matchesSearch && matchesVaulted;
+  });
 
-  const selectRelic = (relic: Relic) => {
-    setSelectedRelic(relic);
+  // Calculer l'EV Radshare de chaque relique visible pour les classer
+  const relicsWithEV = visibleRelics.map((relic) => {
+    const evRadshare = calculateRadshareEV(relic, prices);
+    const evSoloRadiant = calculateSoloEV(relic, "radiant", prices);
+    const evSoloIntact = calculateSoloEV(relic, "intact", prices);
+    return {
+      relic,
+      evRadshare,
+      evSoloRadiant,
+      evSoloIntact
+    };
+  });
+
+  // Trier les reliques par EV Radshare décroissant
+  relicsWithEV.sort((a, b) => b.evRadshare - a.evRadshare);
+
+  // Top 5 des meilleures reliques
+  const top5Relics = relicsWithEV.slice(0, 5);
+
+  const activeRelicObj = relicsWithEV.find((r) => r.relic.name === selectedRelic.name) || relicsWithEV[0] || {
+    relic: RELICS[0],
+    evRadshare: 0,
+    evSoloRadiant: 0,
+    evSoloIntact: 0
   };
 
-  // Rafraîchir tous les prix de la relique sélectionnée
+  const activeRelic = activeRelicObj.relic;
+
+  // Rafraîchir tous les prix de la relique active
   const handleRefreshAll = async () => {
     setIsRefreshing(true);
     for (const drop of activeRelic.drops) {
@@ -35,27 +63,19 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
     setIsRefreshing(false);
   };
 
-  // Calculer les EVs
-  const soloIntactEV = calculateSoloEV(activeRelic, "intact", prices);
-  const soloRadiantEV = calculateSoloEV(activeRelic, "radiant", prices);
-  const radshareRadiantEV = calculateRadshareEV(activeRelic, prices);
-
-  const runTimeMin = 4;
-  const radsharePLHour = Math.round(radshareRadiantEV * (60 / runTimeMin));
-  const soloRadiantPLHour = Math.round(soloRadiantEV * (60 / runTimeMin));
-  const soloIntactPLHour = Math.round(soloIntactEV * (60 / runTimeMin));
+  const runTimeMin = 4; // 4 minutes par run fissure
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <h1 className="title-grad-gold glow-gold">Calculateur de Reliques</h1>
         <p style={styles.subtitle}>
-          Comparez l'espérance de gain en platines en Solo et en Partage de Reliques éclatantes (Radshare).
+          Identifiez les reliques les plus rentables du marché et comparez les espérances de gains (EV).
         </p>
       </div>
 
-      {/* Filter and Option Controls */}
-      <div style={styles.controlsRow}>
+      {/* Control Panel: Hide Vaulted & Search */}
+      <div style={styles.controlPanel} className="glass-panel">
         <label className="checkbox-container">
           <input
             type="checkbox"
@@ -65,125 +85,179 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
           />
           Masquer les reliques vaultées (Non farmables en jeu)
         </label>
+        <div style={styles.searchContainer}>
+          <span style={styles.searchIcon}>🔍</span>
+          <input
+            type="text"
+            placeholder="Rechercher par ère ou nom..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={styles.searchInput}
+          />
+        </div>
       </div>
 
-      {/* Relic Selector Tabs */}
-      <div style={styles.selectorContainer}>
-        {visibleRelics.map((relic) => {
-          const isSelected = activeRelic.name === relic.name;
-          const statusBadgeColor =
-            relic.status === "Unvaulted" ? "badge-success" :
-            relic.status === "Resurgence" ? "badge-gold" :
-            "badge-purple";
+      {/* TOP 5 Section */}
+      <div style={{ marginBottom: "32px" }}>
+        <h3 style={styles.sectionHeading}>🔥 Top 5 des Reliques les plus Rentables (Radshare)</h3>
+        <div style={styles.top5Grid}>
+          {top5Relics.map((item, index) => {
+            const statusBadgeColor =
+              item.relic.status === "Unvaulted" ? "badge-success" :
+              item.relic.status === "Resurgence" ? "badge-gold" :
+              "badge-purple";
+            
+            const isSelected = activeRelic.name === item.relic.name;
 
-          return (
-            <button
-              key={`${relic.era}-${relic.name}`}
-              className="glass-panel"
-              onClick={() => selectRelic(relic)}
-              style={{
-                ...styles.selectorTab,
-                borderColor: isSelected ? "var(--accent-gold)" : "var(--panel-border)",
-                background: isSelected ? "rgba(166, 124, 55, 0.06)" : "var(--panel-bg)",
-                color: isSelected ? "var(--accent-gold)" : "var(--text-primary)",
-              }}
-            >
-              <div style={styles.tabBadgeRow}>
-                <span style={styles.eraBadge}>{relic.era}</span>
-                <span className={`badge ${statusBadgeColor}`} style={{ fontSize: "8px", padding: "1px 4px" }}>
-                  {relic.status === "Unvaulted" ? "Farmable" : relic.status === "Resurgence" ? "Aya" : "Vaulted"}
-                </span>
+            return (
+              <div
+                key={item.relic.name}
+                onClick={() => selectRelic(item.relic)}
+                className="glass-panel glass-panel-hover"
+                style={{
+                  ...styles.top5Card,
+                  borderColor: isSelected ? "var(--accent-gold)" : "var(--panel-border)",
+                  borderTop: `4px solid ${isSelected ? 'var(--accent-gold)' : '#d5d1c4'}`,
+                  background: isSelected ? "rgba(166, 124, 55, 0.05)" : "#ffffff"
+                }}
+              >
+                <div style={styles.top5Header}>
+                  <span style={styles.top5Rank}>#{index + 1}</span>
+                  <span className={`badge ${statusBadgeColor}`} style={{ fontSize: "8px", padding: "1px 4px" }}>
+                    {item.relic.status === "Unvaulted" ? "Farmable" : item.relic.status === "Resurgence" ? "Aya" : "Vaulted"}
+                  </span>
+                </div>
+                <h4 style={styles.top5Title}>{item.relic.era} {item.relic.name}</h4>
+                <div style={styles.top5ProfitRow}>
+                  <span style={styles.top5ProfitLabel}>EV Radshare :</span>
+                  <span className="plat-price plat-price-gold" style={{ fontSize: "16px", fontWeight: 700 }}>
+                    {item.evRadshare.toFixed(1)} PL
+                  </span>
+                </div>
+                <span style={styles.top5HourProfit}>~ {Math.round(item.evRadshare * (60 / runTimeMin))} PL/h</span>
               </div>
-              <span style={styles.relicName}>{relic.name}</span>
-            </button>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       <div style={styles.mainLayout}>
-        {/* Left column: Summary & Comparison */}
+        {/* Left Column: All Relics Table */}
+        <div className="glass-panel" style={styles.tableCard}>
+          <h3 style={styles.sectionTitle}>Catalogue des Reliques</h3>
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Relique</th>
+                  <th>Statut</th>
+                  <th>EV Intact</th>
+                  <th>EV Éclatant</th>
+                  <th>EV Radshare (4x)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {relicsWithEV.map((item) => {
+                  const isSelected = activeRelic.name === item.relic.name;
+                  const statusBadgeColor =
+                    item.relic.status === "Unvaulted" ? "badge-success" :
+                    item.relic.status === "Resurgence" ? "badge-gold" :
+                    "badge-purple";
+
+                  return (
+                    <tr
+                      key={item.relic.name}
+                      onClick={() => selectRelic(item.relic)}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: isSelected ? "rgba(166, 124, 55, 0.04)" : "transparent"
+                      }}
+                    >
+                      <td style={{ fontWeight: 700, color: isSelected ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                        {item.relic.era} {item.relic.name}
+                      </td>
+                      <td>
+                        <span className={`badge ${statusBadgeColor}`}>
+                          {item.relic.status === "Unvaulted" ? "Farmable" : item.relic.status === "Resurgence" ? "Aya" : "Vaulted"}
+                        </span>
+                      </td>
+                      <td className="plat-price">{item.evSoloIntact.toFixed(1)} PL</td>
+                      <td className="plat-price">{item.evSoloRadiant.toFixed(1)} PL</td>
+                      <td>
+                        <span className="plat-price plat-price-gold" style={{ fontWeight: 700 }}>
+                          {item.evRadshare.toFixed(1)} PL
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Right column: Selected Relic Details */}
         <div className="glass-panel" style={styles.summaryCard}>
           <div style={styles.summaryTitleRow}>
             <div>
-              <h2 className="title-grad-gold" style={{ display: "inline-flex", alignItems: "center", gap: "10px" }}>
+              <h2 className="title-grad-gold" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "18px" }}>
                 Relique {activeRelic.era} {activeRelic.name}
               </h2>
-              <span
-                className={`badge ${
-                  activeRelic.status === "Unvaulted" ? "badge-success" :
-                  activeRelic.status === "Resurgence" ? "badge-gold" :
-                  "badge-purple"
-                }`}
-                style={{ marginLeft: "12px" }}
-              >
-                {activeRelic.status === "Unvaulted" ? "Farmable (Active)" : 
-                 activeRelic.status === "Resurgence" ? "Prime Resurgence (Aya)" : 
-                 "Vaultée (Non farmable)"}
-              </span>
+              <div style={{ marginTop: "4px" }}>
+                <span
+                  className={`badge ${
+                    activeRelic.status === "Unvaulted" ? "badge-success" :
+                    activeRelic.status === "Resurgence" ? "badge-gold" :
+                    "badge-purple"
+                  }`}
+                >
+                  {activeRelic.status === "Unvaulted" ? "Active" : 
+                   activeRelic.status === "Resurgence" ? "Prime Resurgence" : 
+                   "Vaultée"}
+                </span>
+              </div>
             </div>
             <button
               className="btn btn-secondary"
               onClick={handleRefreshAll}
               disabled={isRefreshing}
-              style={{ padding: "8px 12px", fontSize: "12px" }}
+              style={{ padding: "8px 12px", fontSize: "11px" }}
             >
-              {isRefreshing ? "Chargement..." : "🔄 Actualiser Prix"}
+              {isRefreshing ? "Chargement..." : "🔄 Actualiser"}
             </button>
           </div>
 
-          <div style={styles.evGrid}>
-            <div style={styles.evItem}>
-              <span style={styles.evLabel}>Solo (Intact)</span>
-              <span className="plat-price" style={styles.evValue}>
-                {soloIntactEV.toFixed(1)} PL
+          <div style={styles.relicDetailStats}>
+            <div style={styles.detailEVBox}>
+              <span style={styles.detailEVLabel}>Radshare (4x)</span>
+              <span className="plat-price plat-price-gold" style={styles.detailEVValue}>
+                {activeRelicObj.evRadshare.toFixed(1)} PL
               </span>
-              <span style={styles.evSub}>~ {soloIntactPLHour} PL / h</span>
+              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evRadshare * (60 / runTimeMin))} PL/h</span>
             </div>
-
-            <div style={styles.evItem}>
-              <span style={styles.evLabel}>Solo (Éclatant)</span>
-              <span className="plat-price" style={styles.evValue}>
-                {soloRadiantEV.toFixed(1)} PL
+            <div style={styles.detailEVBox}>
+              <span style={styles.detailEVLabel}>Solo Éclatant</span>
+              <span className="plat-price" style={styles.detailEVValue}>
+                {activeRelicObj.evSoloRadiant.toFixed(1)} PL
               </span>
-              <span style={styles.evSub}>~ {soloRadiantPLHour} PL / h</span>
-            </div>
-
-            <div style={styles.evItemHighlight}>
-              <span style={styles.evLabelHighlight}>Radshare 4x (Éclatant)</span>
-              <span className="plat-price plat-price-gold" style={styles.evValueHighlight}>
-                {radshareRadiantEV.toFixed(1)} PL
-              </span>
-              <span style={styles.evSubHighlight}>~ {radsharePLHour} PL / h</span>
+              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evSoloRadiant * (60 / runTimeMin))} PL/h</span>
             </div>
           </div>
 
-          <div style={styles.infoBox}>
-            <p>
-              💡 <strong>Règle de calcul Radshare :</strong> En groupe de 4 joueurs avec des reliques éclatantes identiques, l'espérance mathématique prend en compte que vous sélectionnez toujours la récompense la plus chère disponible parmi les 4 tirages indépendants.
-            </p>
-          </div>
-        </div>
-
-        {/* Right column: Drops Details Table */}
-        <div className="glass-panel" style={styles.tableCard}>
-          <h3 style={styles.sectionTitle}>Table des Récompenses & Prix Actuels</h3>
-          <div className="table-container">
-            <table className="data-table">
+          <h4 style={{ ...styles.sectionTitle, marginTop: "20px" }}>Drops de la Relique</h4>
+          <div className="table-container" style={{ marginTop: "8px" }}>
+            <table className="data-table" style={{ fontSize: "12px" }}>
               <thead>
                 <tr>
-                  <th>Récompense</th>
+                  <th>Item</th>
                   <th>Rareté</th>
-                  <th>Probabilité (Intact / Radiant)</th>
-                  <th>Prix Unitaire</th>
+                  <th>Prix</th>
                 </tr>
               </thead>
               <tbody>
                 {activeRelic.drops.map((drop) => {
                   const price = prices[drop.urlName] ?? 0;
                   const isForma = drop.urlName === "forma_blueprint";
-                  
-                  const probIntact = drop.rarity === "rare" ? "2.0%" : drop.rarity === "uncommon" ? "11.0%" : "25.3%";
-                  const probRadiant = drop.rarity === "rare" ? "10.0%" : drop.rarity === "uncommon" ? "20.0%" : "16.7%";
                   
                   const rarityBadgeClass =
                     drop.rarity === "rare" ? "badge-gold" :
@@ -194,16 +268,11 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                     <tr key={drop.urlName}>
                       <td style={{ fontWeight: 600 }}>{drop.name}</td>
                       <td>
-                        <span className={`badge ${rarityBadgeClass}`}>{drop.rarity}</span>
-                      </td>
-                      <td>
-                        <span style={{ color: "var(--text-secondary)" }}>{probIntact}</span>
-                        <span style={{ color: "var(--text-muted)", margin: "0 6px" }}>/</span>
-                        <span style={{ color: "var(--accent-gold)", fontWeight: 600 }}>{probRadiant}</span>
+                        <span className={`badge ${rarityBadgeClass}`} style={{ fontSize: "8px", padding: "1px 4px" }}>{drop.rarity}</span>
                       </td>
                       <td>
                         {isForma ? (
-                          <span style={{ color: "var(--text-muted)", fontStyle: "italic" }}>Non échangeable</span>
+                          <span style={{ color: "var(--text-muted)", fontStyle: "italic" }}>0 PL</span>
                         ) : (
                           <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
                             {price} PL
@@ -231,50 +300,93 @@ const styles: Record<string, React.CSSProperties> = {
   },
   subtitle: {
     color: "var(--text-secondary)",
-    marginTop: "8px",
-    fontSize: "16px",
+    marginTop: "4px",
+    fontSize: "14px",
   },
-  controlsRow: {
-    marginBottom: "20px",
-    backgroundColor: "#ffffff",
-    padding: "12px 16px",
-    borderRadius: "6px",
-    border: "1px solid var(--panel-border)",
-    display: "inline-flex",
-  },
-  selectorContainer: {
-    display: "flex",
-    gap: "12px",
-    marginBottom: "32px",
-    flexWrap: "wrap",
-  },
-  selectorTab: {
-    flex: "1 1 180px",
-    padding: "12px 16px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    cursor: "pointer",
-    borderWidth: "1px",
-    borderRadius: "6px",
-    transition: "all 0.2s ease",
-  },
-  tabBadgeRow: {
+  controlPanel: {
     display: "flex",
     justifyContent: "space-between",
-    width: "100%",
     alignItems: "center",
-    marginBottom: "6px",
+    padding: "16px 20px",
+    borderRadius: "8px",
+    marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+    border: "1px solid var(--panel-border)"
   },
-  eraBadge: {
+  searchContainer: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#faf9f6",
+    border: "1px solid var(--panel-border)",
+    borderRadius: "4px",
+    padding: "6px 12px",
+    width: "300px",
+  },
+  searchIcon: {
+    marginRight: "8px",
+    fontSize: "13px",
+  },
+  searchInput: {
+    border: "none",
+    background: "transparent",
+    outline: "none",
+    width: "100%",
+    fontSize: "13px",
+    color: "var(--text-primary)",
+  },
+  sectionHeading: {
+    fontSize: "14px",
+    fontWeight: 600,
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    color: "var(--text-secondary)",
+    marginBottom: "12px",
+  },
+  top5Grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "16px",
+  },
+  top5Card: {
+    padding: "16px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    transition: "all 0.2s ease",
+    borderWidth: "1px",
+    borderStyle: "solid",
+  },
+  top5Header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "8px",
+  },
+  top5Rank: {
+    fontWeight: 700,
+    fontSize: "12px",
+    color: "var(--accent-gold)",
+  },
+  top5Title: {
+    fontSize: "15px",
+    fontWeight: 700,
+    marginBottom: "12px",
+  },
+  top5ProfitRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  top5ProfitLabel: {
     fontSize: "11px",
     color: "var(--text-muted)",
-    textTransform: "uppercase",
-    fontWeight: 600,
   },
-  relicName: {
-    fontSize: "18px",
-    fontWeight: 700,
+  top5HourProfit: {
+    fontSize: "11px",
+    color: "var(--text-secondary)",
+    marginTop: "4px",
   },
   mainLayout: {
     display: "grid",
@@ -284,88 +396,55 @@ const styles: Record<string, React.CSSProperties> = {
   },
   summaryCard: {
     padding: "24px",
+    border: "1px solid var(--panel-border)"
   },
   summaryTitleRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "24px",
+    marginBottom: "20px",
   },
-  evGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "20px",
-    marginBottom: "24px",
+  relicDetailStats: {
+    display: "flex",
+    gap: "12px",
   },
-  evItem: {
+  detailEVBox: {
+    flex: 1,
     backgroundColor: "#faf9f6",
     border: "1px solid var(--panel-border)",
-    borderRadius: "8px",
-    padding: "16px",
+    padding: "12px",
+    borderRadius: "6px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "6px",
   },
-  evItemHighlight: {
-    backgroundColor: "rgba(166, 124, 55, 0.05)",
-    border: "1px solid rgba(166, 124, 55, 0.25)",
-    borderRadius: "8px",
-    padding: "16px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "6px",
-  },
-  evLabel: {
-    fontSize: "11px",
+  detailEVLabel: {
+    fontSize: "10px",
     color: "var(--text-muted)",
     textTransform: "uppercase",
     fontWeight: 600,
   },
-  evLabelHighlight: {
+  detailEVValue: {
+    fontSize: "18px",
+    fontWeight: 700,
+    margin: "4px 0",
+  },
+  detailEVSub: {
     fontSize: "11px",
-    color: "var(--accent-gold)",
-    textTransform: "uppercase",
-    fontWeight: 700,
-  },
-  evValue: {
-    fontSize: "22px",
-    fontWeight: 700,
-  },
-  evValueHighlight: {
-    fontSize: "24px",
-    fontWeight: 800,
-  },
-  evSub: {
-    fontSize: "13px",
     color: "var(--text-secondary)",
-  },
-  evSubHighlight: {
-    fontSize: "14px",
-    color: "var(--text-primary)",
-    fontWeight: 500,
-  },
-  infoBox: {
-    backgroundColor: "#faf9f6",
-    border: "1px solid var(--panel-border)",
-    borderRadius: "8px",
-    padding: "16px",
-    fontSize: "12px",
-    color: "var(--text-secondary)",
-    lineHeight: "1.5",
   },
   tableCard: {
     padding: "24px",
+    border: "1px solid var(--panel-border)"
   },
   sectionTitle: {
-    fontSize: "15px",
+    fontSize: "14px",
     fontWeight: 600,
     color: "var(--text-primary)",
-    marginBottom: "16px",
+    marginBottom: "12px",
   }
 };
 
 if (typeof window !== "undefined" && window.innerWidth > 992) {
-  styles.mainLayout.gridTemplateColumns = "1fr 1.3fr";
+  styles.mainLayout.gridTemplateColumns = "1.3fr 1fr";
 }

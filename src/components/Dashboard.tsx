@@ -1,10 +1,10 @@
 import React from "react";
-import { RELICS, CORRUPTED_MODS, SYNDICATE_BOUNTIES, MOD_FARM_ACTIVITIES } from "../services/relicData";
+import { RELICS, CORRUPTED_MODS, SYNDICATES, MOD_FARM_ACTIVITIES } from "../services/relicData";
 import {
   calculateRadshareEV,
   calculateCorruptedModsEV,
   calculateEidolonEV,
-  calculateBountyEV,
+  calculateSyndicateConversion,
   calculateModFarmEV
 } from "../utils/calculations";
 
@@ -33,9 +33,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab }) =>
   const eidolonHourProfit = Math.round(singleTridolonEV * eidolonCapturesPerHour);
 
   // Missions Syndicat (Cavia)
-  const caviaBounty = SYNDICATE_BOUNTIES[1];
-  const { totalEV: caviaEV } = calculateBountyEV(caviaBounty, prices);
-  const caviaHourProfit = Math.round(caviaEV * (60 / caviaBounty.runTimeMinutes));
+  const caviaSyndicate = SYNDICATES.find(s => s.id === "cavia") || SYNDICATES[SYNDICATES.length - 1];
+  const { ratio1k } = calculateSyndicateConversion(caviaSyndicate, prices);
+  // Un contrat Cavia donne 7500 réputation et prend 6 minutes
+  const caviaBountyEV = 7.5 * ratio1k;
+  const caviaHourProfit = Math.round(caviaBountyEV * (60 / 6));
 
   // Arbitrages (Nouveau)
   const arbiAct = MOD_FARM_ACTIVITIES[0];
@@ -106,11 +108,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab }) =>
     },
     {
       id: "bounties",
-      title: "Contrats de Syndicats (Cavia Bounties)",
+      title: "Contrats de Syndicats (Cavia)",
       description: "Réaliser des contrats du Cavia dans le Sanctum Anatomica et échanger la réputation contre des Arcanes de Mêlée.",
       profitPerHour: caviaHourProfit,
-      profitPerRun: Math.round(caviaEV),
-      timeLabel: `${caviaBounty.runTimeMinutes} min / run`,
+      profitPerRun: Math.round(caviaBountyEV),
+      timeLabel: "6 min / run",
       difficulty: "Moyen",
       difficultyBadge: "badge-blue",
       borderTheme: "var(--accent-gold)",

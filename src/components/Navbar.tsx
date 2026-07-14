@@ -11,6 +11,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     { id: "relics", label: "Fissures de Reliques", icon: "💎" },
     { id: "corrupted", label: "Soutes (Corrompus)", icon: "🔑" },
     { id: "modfarms", label: "Farms de Mods", icon: "⚔️" },
+    { id: "arcanes", label: "Arcanes", icon: "🔮" },
     { id: "eidolons", label: "Chasse Eidolons", icon: "👁️" },
     { id: "bounties", label: "Syndicats", icon: "📜" },
   ];

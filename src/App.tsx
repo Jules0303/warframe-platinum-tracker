@@ -4,6 +4,7 @@ import { Dashboard } from "./components/Dashboard";
 import { RelicTracker } from "./components/RelicTracker";
 import { CorruptedModsTracker } from "./components/CorruptedModsTracker";
 import { ModFarmsTracker } from "./components/ModFarmsTracker";
+import { ArcaneTracker } from "./components/ArcaneTracker";
 import { EidolonTracker } from "./components/EidolonTracker";
 import { BountyTracker } from "./components/BountyTracker";
 import { warframeMarket, FALLBACK_PRICES } from "./services/warframeMarket";
@@ -85,6 +86,9 @@ function App() {
         )}
         {activeTab === "modfarms" && (
           <ModFarmsTracker prices={prices} refreshPrice={refreshPrice} />
+        )}
+        {activeTab === "arcanes" && (
+          <ArcaneTracker prices={prices} refreshPrice={refreshPrice} />
         )}
         {activeTab === "eidolons" && (
           <EidolonTracker prices={prices} refreshPrice={refreshPrice} />

@@ -1,4 +1,4 @@
-import type { Relic, CorruptedMod, SyndicateBounty, ModFarmActivity } from "../services/relicData";
+import type { Relic, CorruptedMod, Syndicate, ModFarmActivity } from "../services/relicData";
 
 // Calcul de l'Expected Value (EV) en Solo
 export function calculateSoloEV(
@@ -128,32 +128,37 @@ export function calculateEidolonEV(prices: Record<string, number>): number {
   return teralystEV + gantulystEV + hydrolystEV;
 }
 
-// Calcul de l'EV pour un contrat de Syndicat (Zariman / Cavia)
-export function calculateBountyEV(
-  bounty: SyndicateBounty,
+// Calcul de conversion de réputation pour un Syndicat (générique)
+export function calculateSyndicateConversion(
+  syndicate: Syndicate,
   prices: Record<string, number>
-): { totalEV: number; standingEV: number; dropsEV: number } {
-  let maxStandingValue = 0;
-  bounty.exchangeArcanes.forEach((arcane) => {
-    const price = prices[arcane.urlName] ?? 0;
-    const valuePerPoint = price / arcane.cost;
-    if (valuePerPoint > maxStandingValue) {
-      maxStandingValue = valuePerPoint;
+): { bestItemName: string; ratio1k: number; evMaxStanding: number } {
+  let bestItemName = "Aucun";
+  let maxRatio = 0; // PL pour 1 point de réputation
+
+  syndicate.exchangeItems.forEach((item) => {
+    const price = prices[item.urlName] ?? 0;
+    const ratio = price / item.cost;
+    if (ratio > maxRatio) {
+      maxRatio = ratio;
+      bestItemName = item.name;
     }
   });
-  const standingEV = bounty.standingReward * maxStandingValue;
 
-  let dropsEV = 0;
-  bounty.directDrops.forEach((drop) => {
-    const price = prices[drop.urlName] ?? 0;
-    dropsEV += drop.chance * price;
-  });
+  // Calcul du gain pour 1k points
+  const ratio1k = maxRatio * 1000;
+  
+  // Calcul pour la réputation max (132 000 points)
+  const evMaxStanding = maxRatio * syndicate.maxStanding;
 
-  const totalEV = standingEV + dropsEV;
-  return { totalEV, standingEV, dropsEV };
+  return {
+    bestItemName,
+    ratio1k,
+    evMaxStanding
+  };
 }
 
-// 6. Calculs pour les nouveaux farms de mods
+// Calculs pour les farms de mods
 export function calculateModFarmEV(
   activity: ModFarmActivity,
   prices: Record<string, number>
@@ -162,9 +167,7 @@ export function calculateModFarmEV(
   let dropsEV = 0;
 
   if (activity.id === "arbitration") {
-    // 1 run d'Arbitrage moyen (20 mins) = ~15 Essence Vitus
     const vitusAmount = 15;
-    // On cherche la valeur max des mods Galvanisés achetables (coût de 20 Vitus)
     let maxGalvPrice = 0;
     activity.rewards.forEach(r => {
       if (r.cost && r.cost === 20) {
@@ -175,32 +178,27 @@ export function calculateModFarmEV(
     const vitusUnitValue = maxGalvPrice / 20;
     currencyEV = vitusAmount * vitusUnitValue;
 
-    // Drops directs (Adaptation et Rolling Guard) sur 4 rotations moyennes de 5 mins
     const numRotations = 4;
     activity.rewards.forEach(r => {
-      if (!r.cost) { // Adaptation / Rolling Guard
+      if (!r.cost) {
         const p = prices[r.urlName] ?? 0;
         dropsEV += numRotations * r.chance * p;
       }
     });
   } else if (activity.id === "steel_path") {
-    // 1 run Steel Path de 30 mins = 6 Acolytes = 12 Steel Essence + 6 Arcanes
     const steelEssenceAmount = 12;
-    // Teshin vend 1 pack de reliques (valeur estimée 4.5 PL) pour 15 Steel Essence
     const relicPackValue = 4.5;
     const steelEssenceUnitValue = relicPackValue / 15;
     currencyEV = steelEssenceAmount * steelEssenceUnitValue;
 
-    // Drops directs (6 arcanes d'Acolytes)
     const numArcanes = 6;
     activity.rewards.forEach(r => {
-      if (!r.cost) { // Primary/Secondary Merciless
+      if (!r.cost) {
         const p = prices[r.urlName] ?? 0;
         dropsEV += numArcanes * r.chance * p;
       }
     });
   } else if (activity.id === "plains_bounty") {
-    // Plains Bounties : simple somme pondérée des chances
     activity.rewards.forEach(r => {
       const p = prices[r.urlName] ?? 0;
       dropsEV += r.chance * p;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { SYNDICATE_BOUNTIES, type SyndicateBounty } from "../services/relicData";
-import { calculateBountyEV } from "../utils/calculations";
+import { SYNDICATES, type Syndicate } from "../services/relicData";
+import { calculateSyndicateConversion } from "../utils/calculations";
 
 interface BountyTrackerProps {
   prices: Record<string, number>;
@@ -8,152 +8,114 @@ interface BountyTrackerProps {
 }
 
 export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPrice }) => {
-  const [selectedBounty, setSelectedBounty] = useState<SyndicateBounty>(SYNDICATE_BOUNTIES[0]);
+  const [selectedSyndicate, setSelectedSyndicate] = useState<Syndicate>(SYNDICATES[0]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [filterCategory, setFilterCategory] = useState<string>("Tous");
 
   const handleRefreshAll = async () => {
     setIsRefreshing(true);
-    // On actualise les prix des arcanes échangeables
-    for (const arcane of selectedBounty.exchangeArcanes) {
-      await refreshPrice(arcane.urlName);
-    }
-    // On actualise les drops directs
-    for (const drop of selectedBounty.directDrops) {
-      await refreshPrice(drop.urlName);
+    for (const item of selectedSyndicate.exchangeItems) {
+      await refreshPrice(item.urlName);
     }
     setIsRefreshing(false);
   };
 
-  const { totalEV, standingEV, dropsEV } = calculateBountyEV(selectedBounty, prices);
-  const plPerHour = Math.round(totalEV * (60 / selectedBounty.runTimeMinutes));
-
-  // Trouver l'arcane le plus rentable à acheter
-  let bestArcaneToBuy = selectedBounty.exchangeArcanes[0];
-  let bestArcaneRatio = 0;
-  selectedBounty.exchangeArcanes.forEach((arcane) => {
-    const price = prices[arcane.urlName] ?? 0;
-    const ratio = price / arcane.cost;
-    if (ratio > bestArcaneRatio) {
-      bestArcaneRatio = ratio;
-      bestArcaneToBuy = arcane;
-    }
+  // Calculer la conversion pour tous les syndicats
+  const syndicatesWithConversion = SYNDICATES.map((syndicate) => {
+    const conversion = calculateSyndicateConversion(syndicate, prices);
+    return {
+      syndicate,
+      ...conversion
+    };
   });
+
+  // Trier par ratio (PL pour 10k points) décroissant
+  syndicatesWithConversion.sort((a, b) => b.ratio1k - a.ratio1k);
+
+  // Filtrer la liste
+  const filteredSyndicates = syndicatesWithConversion.filter((item) => 
+    filterCategory === "Tous" || item.syndicate.category === filterCategory
+  );
+
+  const activeSyndicateObj = syndicatesWithConversion.find(
+    (s) => s.syndicate.id === selectedSyndicate.id
+  ) || syndicatesWithConversion[0];
+
+  const activeSyndicate = activeSyndicateObj.syndicate;
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 className="title-grad-purple glow-purple">Farming de Contrats de Syndicat</h1>
+        <h1 className="title-grad-purple glow-gold">Comparateur de Syndicats & Réputations</h1>
         <p style={styles.subtitle}>
-          Calculez la rentabilité des missions du Zariman et du Cavia en combinant les récompenses de réputation et les taux de drop directs.
+          Comparez le taux de conversion en platines de vos points de réputation à travers tous les syndicats du jeu.
         </p>
       </div>
 
-      {/* Syndicate Selector */}
-      <div style={styles.selectorContainer}>
-        {SYNDICATE_BOUNTIES.map((bounty) => (
+      {/* Filter Tabs */}
+      <div style={styles.filterRow}>
+        {["Tous", "Classique", "Monde Ouvert"].map((cat) => (
           <button
-            key={bounty.name}
-            className="glass-panel"
-            onClick={() => setSelectedBounty(bounty)}
+            key={cat}
+            onClick={() => setFilterCategory(cat)}
             style={{
-              ...styles.selectorTab,
-              borderColor: selectedBounty.name === bounty.name ? "var(--accent-purple)" : "var(--panel-border)",
-              background: selectedBounty.name === bounty.name ? "rgba(171, 71, 188, 0.08)" : "var(--panel-bg)",
-              color: selectedBounty.name === bounty.name ? "var(--accent-purple)" : "var(--text-primary)",
+              ...styles.filterBtn,
+              borderColor: filterCategory === cat ? "var(--accent-gold)" : "rgba(0,0,0,0.05)",
+              background: filterCategory === cat ? "rgba(166, 124, 55, 0.08)" : "var(--panel-bg)",
+              color: filterCategory === cat ? "var(--accent-gold)" : "var(--text-secondary)",
             }}
           >
-            <span style={styles.relicName}>{bounty.name.split(" (")[0]}</span>
-            <span style={styles.eraBadge}>{bounty.name.includes("Zariman") ? "Holdfasts" : "Cavia"}</span>
+            {cat}
           </button>
         ))}
       </div>
 
       <div style={styles.mainLayout}>
-        {/* Left Column: Summary */}
-        <div className="glass-panel" style={styles.summaryCard}>
-          <div style={styles.summaryTitleRow}>
-            <h2 className="title-grad-purple">Analyse du Contrat</h2>
-            <button
-              className="btn btn-secondary"
-              onClick={handleRefreshAll}
-              disabled={isRefreshing}
-              style={{ padding: "8px 12px", fontSize: "12px" }}
-            >
-              {isRefreshing ? "Chargement..." : "🔄 Actualiser Prix"}
-            </button>
-          </div>
-
-          <div style={styles.statGrid}>
-            <div style={styles.statBox}>
-              <span style={styles.statLabel}>EV Totale par Run</span>
-              <span className="plat-price plat-price-gold" style={styles.statValue}>
-                {totalEV.toFixed(1)} PL
-              </span>
-              <span style={styles.statSub}>
-                Réput : {standingEV.toFixed(1)} PL | Drops : {dropsEV.toFixed(1)} PL
-              </span>
-            </div>
-
-            <div style={styles.statBoxHighlight}>
-              <span style={styles.statLabelHighlight}>Gains Horaires Estimés</span>
-              <span className="plat-price plat-price-gold" style={styles.statValueHighlight}>
-                {plPerHour} <span style={{ fontSize: "14px", fontWeight: "normal" }}>PL / h</span>
-              </span>
-              <span style={styles.statSubHighlight}>⏱️ Basé sur {selectedBounty.runTimeMinutes} min / run</span>
-            </div>
-          </div>
-
-          <div style={styles.bestExchangeBox}>
-            <span style={{ fontSize: "12px", color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 600 }}>
-              💡 Stratégie de Réputation recommandée
-            </span>
-            <p style={{ marginTop: "8px", fontSize: "14px", lineHeight: "1.5" }}>
-              Achetez l'arcane <strong>{bestArcaneToBuy.name}</strong> chez le marchand du syndicat. 
-              Avec un prix actuel de <strong>{prices[bestArcaneToBuy.urlName] ?? 0} PL</strong> pour un coût de {bestArcaneToBuy.cost} points, 
-              cela offre le meilleur ratio de conversion : 
-              <strong style={{ color: "var(--accent-purple)", marginLeft: "4px" }}>
-                {((prices[bestArcaneToBuy.urlName] ?? 0) / bestArcaneToBuy.cost * 1000).toFixed(2)} PL pour 1k Réput
-              </strong>.
-            </p>
-          </div>
-        </div>
-
-        {/* Right Column: Rewards details */}
+        {/* Left Column: All Syndicates Table */}
         <div className="glass-panel" style={styles.tableCard}>
-          <h3 style={styles.sectionTitle}>Boutique de Réputation & Drops Directs</h3>
-          
-          <h4 style={styles.subSectionTitle}>Arcanes Échangeables</h4>
-          <div className="table-container" style={{ marginBottom: "24px" }}>
+          <h3 style={styles.sectionTitle}>Classement des Syndicats</h3>
+          <div className="table-container">
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Arcane</th>
-                  <th>Coût Réputation</th>
-                  <th>Prix Actuel</th>
-                  <th>Valeur pour 10k points</th>
+                  <th>Syndicat</th>
+                  <th>Catégorie</th>
+                  <th>Meilleur Item</th>
+                  <th>PL pour 10k Pts</th>
+                  <th>Max Standing (132k)</th>
                 </tr>
               </thead>
               <tbody>
-                {selectedBounty.exchangeArcanes.map((arcane) => {
-                  const price = prices[arcane.urlName] ?? 0;
-                  const value10k = (price / arcane.cost) * 10000;
-                  const isBest = arcane.urlName === bestArcaneToBuy.urlName;
-
+                {filteredSyndicates.map((item) => {
+                  const isSelected = activeSyndicate.id === item.syndicate.id;
+                  
                   return (
-                    <tr key={arcane.urlName} style={{ backgroundColor: isBest ? "rgba(171,71,188,0.03)" : "transparent" }}>
-                      <td style={{ fontWeight: 600, color: isBest ? "var(--accent-purple)" : "var(--text-primary)" }}>
-                        {arcane.name} {isBest && "⭐"}
+                    <tr
+                      key={item.syndicate.id}
+                      onClick={() => setSelectedSyndicate(item.syndicate)}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: isSelected ? "rgba(166,124,55,0.04)" : "transparent"
+                      }}
+                    >
+                      <td style={{ fontWeight: 700, color: isSelected ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                        {item.syndicate.name.split(" (")[0]}
                       </td>
-                      <td style={{ color: "var(--text-secondary)" }}>{arcane.cost}</td>
                       <td>
-                        <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
-                          {price} PL
+                        <span className={`badge ${item.syndicate.category === "Classique" ? "badge-blue" : "badge-purple"}`}>
+                          {item.syndicate.category}
                         </span>
                       </td>
+                      <td style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+                        {item.bestItemName.split(" (")[0]}
+                      </td>
                       <td>
-                        <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
-                          {value10k.toFixed(1)} PL
+                        <span className="plat-price plat-price-gold" style={{ fontWeight: 700 }}>
+                          {item.ratio1k.toFixed(1)} PL
                         </span>
+                      </td>
+                      <td className="plat-price">
+                        {Math.round(item.evMaxStanding)} PL
                       </td>
                     </tr>
                   );
@@ -161,27 +123,65 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
               </tbody>
             </table>
           </div>
+        </div>
 
-          <h4 style={styles.subSectionTitle}>Drops Directs Estimés</h4>
-          <div className="table-container">
-            <table className="data-table">
+        {/* Right Column: Selected Syndicate Detail Panel */}
+        <div className="glass-panel" style={styles.summaryCard}>
+          <div style={styles.summaryTitleRow}>
+            <div>
+              <h2 className="title-grad-gold" style={{ fontSize: "18px" }}>
+                {activeSyndicate.name}
+              </h2>
+              <div style={{ marginTop: "4px" }}>
+                <span className={`badge ${activeSyndicate.category === "Classique" ? "badge-blue" : "badge-purple"}`}>
+                  {activeSyndicate.category}
+                </span>
+              </div>
+            </div>
+            <button
+              className="btn btn-secondary"
+              onClick={handleRefreshAll}
+              disabled={isRefreshing}
+              style={{ padding: "8px 12px", fontSize: "11px" }}
+            >
+              {isRefreshing ? "Chargement..." : "🔄 Actualiser"}
+            </button>
+          </div>
+
+          {/* Quick Stats Box */}
+          <div style={styles.statBox}>
+            <span style={styles.statLabel}>Meilleur Ratio de Conversion</span>
+            <span style={styles.statValue}>
+              {activeSyndicateObj.bestItemName.split(" (")[0]}
+            </span>
+            <span className="plat-price plat-price-gold" style={{ fontSize: "20px", fontWeight: 800, marginTop: "8px" }}>
+              {activeSyndicateObj.ratio1k.toFixed(1)} PL <span style={{ fontSize: "11px", fontWeight: "normal", color: "var(--text-muted)" }}>/ 10k points</span>
+            </span>
+          </div>
+
+          <h4 style={{ ...styles.sectionTitle, marginTop: "20px" }}>Boutique de Récompenses</h4>
+          <div className="table-container" style={{ marginTop: "8px" }}>
+            <table className="data-table" style={{ fontSize: "12px" }}>
               <thead>
                 <tr>
-                  <th>Item Drop</th>
-                  <th>Taux de Drop estimé</th>
-                  <th>Prix Actuel</th>
-                  <th>EV Partielle</th>
+                  <th>Item</th>
+                  <th>Coût</th>
+                  <th>Prix</th>
+                  <th>PL/10k Pts</th>
                 </tr>
               </thead>
               <tbody>
-                {selectedBounty.directDrops.map((drop) => {
-                  const price = prices[drop.urlName] ?? 0;
-                  const partialEV = drop.chance * price;
+                {activeSyndicate.exchangeItems.map((item) => {
+                  const price = prices[item.urlName] ?? 0;
+                  const ratio10k = (price / item.cost) * 10000;
+                  const isBest = item.name === activeSyndicateObj.bestItemName;
 
                   return (
-                    <tr key={drop.urlName}>
-                      <td style={{ fontWeight: 600 }}>{drop.name}</td>
-                      <td style={{ color: "var(--text-secondary)" }}>{(drop.chance * 100).toFixed(0)}%</td>
+                    <tr key={item.urlName} style={{ backgroundColor: isBest ? "rgba(166,124,55,0.03)" : "transparent" }}>
+                      <td style={{ fontWeight: 600, color: isBest ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                        {item.name.split(" (")[0]} {isBest && "⭐"}
+                      </td>
+                      <td style={{ color: "var(--text-secondary)" }}>{item.cost}</td>
                       <td>
                         <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
                           {price} PL
@@ -189,7 +189,7 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
                       </td>
                       <td>
                         <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
-                          {partialEV.toFixed(1)} PL
+                          {ratio10k.toFixed(1)} PL
                         </span>
                       </td>
                     </tr>
@@ -209,40 +209,31 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "24px 0",
   },
   header: {
-    marginBottom: "32px",
+    marginBottom: "24px",
   },
   subtitle: {
     color: "var(--text-secondary)",
-    marginTop: "8px",
-    fontSize: "16px",
-  },
-  selectorContainer: {
-    display: "flex",
-    gap: "16px",
-    marginBottom: "32px",
-    flexWrap: "wrap",
-  },
-  selectorTab: {
-    flex: "1 1 200px",
-    padding: "16px 20px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    cursor: "pointer",
-    borderWidth: "1px",
-    borderRadius: "12px",
-    transition: "all 0.2s ease",
-  },
-  eraBadge: {
-    fontSize: "12px",
-    color: "var(--text-muted)",
-    textTransform: "uppercase",
-    fontWeight: 600,
-  },
-  relicName: {
-    fontSize: "18px",
-    fontWeight: 700,
     marginTop: "4px",
+    fontSize: "14px",
+  },
+  filterRow: {
+    display: "flex",
+    gap: "8px",
+    marginBottom: "24px",
+    backgroundColor: "#ffffff",
+    padding: "10px 16px",
+    borderRadius: "6px",
+    border: "1px solid var(--panel-border)",
+    width: "fit-content",
+  },
+  filterBtn: {
+    border: "1px solid transparent",
+    padding: "6px 12px",
+    borderRadius: "4px",
+    fontSize: "12px",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.2s ease",
   },
   mainLayout: {
     display: "grid",
@@ -252,92 +243,48 @@ const styles: Record<string, React.CSSProperties> = {
   },
   summaryCard: {
     padding: "24px",
+    border: "1px solid var(--panel-border)"
   },
   summaryTitleRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "24px",
-  },
-  statGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "20px",
-    marginBottom: "24px",
+    marginBottom: "20px",
   },
   statBox: {
-    backgroundColor: "rgba(0,0,0,0.15)",
-    border: "1px solid rgba(255,255,255,0.03)",
-    borderRadius: "12px",
-    padding: "20px",
+    backgroundColor: "#faf9f6",
+    border: "1px solid var(--panel-border)",
+    padding: "16px",
+    borderRadius: "6px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "8px",
-  },
-  statBoxHighlight: {
-    backgroundColor: "rgba(171, 71, 188, 0.05)",
-    border: "1px solid rgba(171, 71, 188, 0.2)",
-    boxShadow: "0 0 15px rgba(171, 71, 188, 0.05)",
-    borderRadius: "12px",
-    padding: "20px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "8px",
+    textAlign: "center",
   },
   statLabel: {
-    fontSize: "12px",
+    fontSize: "10px",
     color: "var(--text-muted)",
     textTransform: "uppercase",
     fontWeight: 600,
   },
-  statLabelHighlight: {
-    fontSize: "12px",
-    color: "var(--accent-purple)",
-    textTransform: "uppercase",
-    fontWeight: 700,
-  },
   statValue: {
-    fontSize: "24px",
+    fontSize: "14px",
     fontWeight: 700,
-    textAlign: "center",
-  },
-  statValueHighlight: {
-    fontSize: "26px",
-    fontWeight: 800,
-  },
-  statSub: {
-    fontSize: "12px",
-    color: "var(--text-muted)",
-  },
-  statSubHighlight: {
-    fontSize: "12px",
-    color: "var(--text-secondary)",
-  },
-  bestExchangeBox: {
-    backgroundColor: "rgba(255,255,255,0.02)",
-    border: "1px solid rgba(255,255,255,0.05)",
-    borderRadius: "12px",
-    padding: "16px",
+    marginTop: "4px",
+    color: "var(--text-primary)",
   },
   tableCard: {
     padding: "24px",
+    border: "1px solid var(--panel-border)"
   },
   sectionTitle: {
-    fontSize: "16px",
-    fontWeight: 600,
-    color: "var(--text-primary)",
-    marginBottom: "20px",
-  },
-  subSectionTitle: {
     fontSize: "14px",
     fontWeight: 600,
-    color: "var(--text-secondary)",
+    color: "var(--text-primary)",
     marginBottom: "12px",
   }
 };
 
 if (typeof window !== "undefined" && window.innerWidth > 992) {
-  styles.mainLayout.gridTemplateColumns = "1fr 1.3fr";
+  styles.mainLayout.gridTemplateColumns = "1.3fr 1fr";
 }

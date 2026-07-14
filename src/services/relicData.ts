@@ -21,11 +21,12 @@ export interface Arcane {
   name: string;
   urlName: string;
   rarity: "common" | "uncommon" | "rare";
+  source: string;
 }
 
-// 1. Liste des Reliques Actives (Unvaulted) et Vaultées pour exemple
+// 1. Base de données étendue de reliques (Gauss, Sevagoth, Wisp, Saryn, Volt, Nekros, Protea)
 export const RELICS: Relic[] = [
-  // Reliques de SEVAGOTH PRIME (100% actives et farmables en 2026)
+  // SEVAGOTH PRIME (Actif - Unvaulted)
   {
     era: "Lith",
     name: "C12",
@@ -78,7 +79,7 @@ export const RELICS: Relic[] = [
       { name: "Sevagoth Prime Chassis", urlName: "sevagoth_prime_chassis", rarity: "rare" }
     ]
   },
-  // Reliques de GAUSS PRIME (Unvaulted et très populaires)
+  // GAUSS PRIME (Actif - Unvaulted)
   {
     era: "Axi",
     name: "B7",
@@ -105,10 +106,10 @@ export const RELICS: Relic[] = [
       { name: "Gauss Prime Chassis", urlName: "gauss_prime_chassis", rarity: "rare" }
     ]
   },
-  // Relique en Prime Resurgence (exemple)
+  // WISP PRIME (Resurgence)
   {
     era: "Meso",
-    name: "W4 (Wisp)",
+    name: "W4",
     status: "Resurgence",
     drops: [
       { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
@@ -119,10 +120,24 @@ export const RELICS: Relic[] = [
       { name: "Wisp Prime Blueprint", urlName: "wisp_prime_blueprint", rarity: "rare" }
     ]
   },
-  // Reliques Vaultées (Exemple d'affichage/filtrage)
+  // PROTEA PRIME (Vaulted)
+  {
+    era: "Axi",
+    name: "P7",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Burston Prime Stock", urlName: "burston_prime_stock", rarity: "common" },
+      { name: "Orthos Prime Blueprint", urlName: "orthos_prime_blueprint", rarity: "common" },
+      { name: "Protea Prime Neuroptics Blueprint", urlName: "protea_prime_neuroptics", rarity: "uncommon" },
+      { name: "Velox Prime Barrel", urlName: "velox_prime_barrel", rarity: "uncommon" },
+      { name: "Protea Prime Chassis Blueprint", urlName: "protea_prime_chassis", rarity: "rare" }
+    ]
+  },
+  // SARYN PRIME (Vaulted)
   {
     era: "Lith",
-    name: "S11 (Saryn)",
+    name: "S11",
     status: "Vaulted",
     drops: [
       { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
@@ -133,9 +148,10 @@ export const RELICS: Relic[] = [
       { name: "Saryn Prime Blueprint", urlName: "saryn_prime_blueprint", rarity: "rare" }
     ]
   },
+  // VOLT PRIME (Vaulted)
   {
     era: "Neo",
-    name: "V10 (Volt)",
+    name: "V10",
     status: "Vaulted",
     drops: [
       { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
@@ -144,6 +160,20 @@ export const RELICS: Relic[] = [
       { name: "Volt Prime Neuroptics Blueprint", urlName: "volt_prime_neuroptics", rarity: "uncommon" },
       { name: "Volt Prime Chassis Blueprint", urlName: "volt_prime_chassis", rarity: "uncommon" },
       { name: "Volt Prime Blueprint", urlName: "volt_prime_blueprint", rarity: "rare" }
+    ]
+  },
+  // NEKROS PRIME (Vaulted)
+  {
+    era: "Axi",
+    name: "N10",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Dakra Prime Blade", urlName: "dakra_prime_blade", rarity: "common" },
+      { name: "Carrier Prime Systems Blueprint", urlName: "carrier_prime_systems", rarity: "common" },
+      { name: "Nekros Prime Systems Blueprint", urlName: "nekros_prime_systems", rarity: "uncommon" },
+      { name: "Nekros Prime Neuroptics Blueprint", urlName: "nekros_prime_neuroptics", rarity: "uncommon" },
+      { name: "Nekros Prime Blueprint", urlName: "nekros_prime_blueprint", rarity: "rare" }
     ]
   }
 ];
@@ -176,82 +206,177 @@ export const CORRUPTED_MODS: CorruptedMod[] = [
   { name: "Bane of Corrupted", urlName: "bane_of_corrupted", category: "Mêlée" }
 ];
 
-// 3. Arcanes d'Eidolons
+// 3. Modèles d'Arcanes (utilisés pour l'onglet dédié)
+export const ARCANES: Arcane[] = [
+  // Eidolons
+  { name: "Arcane Energize", urlName: "arcane_energize", rarity: "rare", source: "Eidolons" },
+  { name: "Arcane Grace", urlName: "arcane_grace", rarity: "rare", source: "Eidolons" },
+  { name: "Arcane Barrier", urlName: "arcane_barrier", rarity: "rare", source: "Eidolons" },
+  { name: "Arcane Aegis", urlName: "arcane_aegis", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Guardian", urlName: "arcane_guardian", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Strike", urlName: "arcane_strike", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Fury", urlName: "arcane_fury", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Precision", urlName: "arcane_precision", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Velocity", urlName: "arcane_velocity", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Trickery", urlName: "arcane_trickery", rarity: "uncommon", source: "Eidolons" },
+  { name: "Arcane Nullifier", urlName: "arcane_nullifier", rarity: "common", source: "Eidolons" },
+  { name: "Arcane Deflection", urlName: "arcane_deflection", rarity: "common", source: "Eidolons" },
+  { name: "Arcane Warmth", urlName: "arcane_warmth", rarity: "common", source: "Eidolons" },
+  { name: "Arcane Ice", urlName: "arcane_ice", rarity: "common", source: "Eidolons" },
+  { name: "Arcane Healing", urlName: "arcane_healing", rarity: "common", source: "Eidolons" },
+  { name: "Arcane Resistance", urlName: "arcane_resistance", rarity: "common", source: "Eidolons" },
+
+  // Zariman (Holdfasts)
+  { name: "Molt Augmented", urlName: "molt_augmented", rarity: "uncommon", source: "Zariman" },
+  { name: "Molt Efficiency", urlName: "molt_efficiency", rarity: "uncommon", source: "Zariman" },
+  { name: "Molt Reconstruct", urlName: "molt_reconstruct", rarity: "common", source: "Zariman" },
+
+  // Cavia (Albrecht's Laboratories)
+  { name: "Melee Influence", urlName: "melee_influence", rarity: "common", source: "Cavia" },
+  { name: "Melee Exposure", urlName: "melee_exposure", rarity: "common", source: "Cavia" },
+  { name: "Melee Animosity", urlName: "melee_animosity", rarity: "common", source: "Cavia" },
+  { name: "Melee Crescendo", urlName: "melee_crescendo", rarity: "rare", source: "Cavia" },
+  { name: "Melee Duplicate", urlName: "melee_duplicate", rarity: "rare", source: "Cavia" },
+
+  // Fortuna (Vox Solaris)
+  { name: "Magus Lockdown", urlName: "magus_lockdown", rarity: "rare", source: "Fortuna" },
+  { name: "Magus Melt", urlName: "magus_melt", rarity: "uncommon", source: "Fortuna" },
+  
+  // Cetus (Quills)
+  { name: "Magus Elevate", urlName: "magus_elevate", rarity: "rare", source: "Cetus" },
+  { name: "Magus Husk", urlName: "magus_husk", rarity: "uncommon", source: "Cetus" },
+
+  // Steel Path
+  { name: "Primary Merciless", urlName: "primary_merciless", rarity: "common", source: "Steel Path" },
+  { name: "Secondary Merciless", urlName: "secondary_merciless", rarity: "common", source: "Steel Path" }
+];
+
 export const EIDOLON_ARCANES = {
-  teralyst: [
-    { name: "Arcane Nullifier", urlName: "arcane_nullifier", rarity: "common" as const },
-    { name: "Arcane Warmth", urlName: "arcane_warmth", rarity: "common" as const },
-    { name: "Arcane Deflection", urlName: "arcane_deflection", rarity: "common" as const },
-    { name: "Arcane Ice", urlName: "arcane_ice", rarity: "common" as const },
-    { name: "Arcane Healing", urlName: "arcane_healing", rarity: "common" as const },
-    { name: "Arcane Resistance", urlName: "arcane_resistance", rarity: "common" as const }
-  ],
-  gantulyst: [
-    { name: "Arcane Guardian", urlName: "arcane_guardian", rarity: "uncommon" as const },
-    { name: "Arcane Strike", urlName: "arcane_strike", rarity: "uncommon" as const },
-    { name: "Arcane Fury", urlName: "arcane_fury", rarity: "uncommon" as const },
-    { name: "Arcane Precision", urlName: "arcane_precision", rarity: "uncommon" as const },
-    { name: "Arcane Velocity", urlName: "arcane_velocity", rarity: "uncommon" as const },
-    { name: "Arcane Nullifier", urlName: "arcane_nullifier", rarity: "common" as const },
-    { name: "Arcane Deflection", urlName: "arcane_deflection", rarity: "common" as const }
-  ],
-  hydrolyst: [
-    { name: "Arcane Energize", urlName: "arcane_energize", rarity: "rare" as const },
-    { name: "Arcane Grace", urlName: "arcane_grace", rarity: "rare" as const },
-    { name: "Arcane Barrier", urlName: "arcane_barrier", rarity: "rare" as const },
-    { name: "Arcane Aegis", urlName: "arcane_aegis", rarity: "uncommon" as const },
-    { name: "Arcane Trickery", urlName: "arcane_trickery", rarity: "uncommon" as const },
-    { name: "Arcane Guardian", urlName: "arcane_guardian", rarity: "uncommon" as const },
-    { name: "Arcane Strike", urlName: "arcane_strike", rarity: "uncommon" as const }
-  ]
+  teralyst: ARCANES.filter(a => a.source === "Eidolons" && a.rarity === "common"),
+  gantulyst: ARCANES.filter(a => a.source === "Eidolons" && (a.rarity === "common" || a.rarity === "uncommon") && a.name !== "Arcane Aegis" && a.name !== "Arcane Trickery"),
+  hydrolyst: ARCANES.filter(a => a.source === "Eidolons")
 };
 
-// 4. Données de contrats (Bounties) de Syndicats
-export interface SyndicateBounty {
+// 4. Comparateur de Syndicats
+export interface Syndicate {
+  id: string;
   name: string;
-  standingReward: number;
-  runTimeMinutes: number;
-  exchangeArcanes: { name: string; urlName: string; cost: number }[];
-  directDrops: { name: string; urlName: string; chance: number }[];
+  category: "Classique" | "Monde Ouvert";
+  maxStanding: number;
+  exchangeItems: { name: string; urlName: string; cost: number }[];
 }
 
-export const SYNDICATE_BOUNTIES: SyndicateBounty[] = [
+export const SYNDICATES: Syndicate[] = [
+  // 6 Syndicats de Base (Classiques)
   {
-    name: "Les Imposteurs (Zariman - Bounties)",
-    standingReward: 5000,
-    runTimeMinutes: 5,
-    exchangeArcanes: [
-      { name: "Molt Augmented", urlName: "molt_augmented", cost: 10000 },
-      { name: "Molt Efficiency", urlName: "molt_efficiency", cost: 10000 },
-      { name: "Molt Reconstruct", urlName: "molt_reconstruct", cost: 10000 }
-    ],
-    directDrops: [
-      { name: "Gyre Blueprint", urlName: "gyre_blueprint", chance: 0.12 },
-      { name: "Void Thrax Plasm", urlName: "void_thrax_plasm", chance: 0.3 }
+    id: "steel_meridian",
+    name: "Méridien d'Acier (Steel Meridian)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Mesa Waltz (Mod d'Augmentation)", urlName: "mesa_waltz", cost: 25000 },
+      { name: "Vaykor Marelok (Arme de Syndicat)", urlName: "vaykor_marelok", cost: 100000 }
     ]
   },
   {
-    name: "Sanctum Anatomica (Cavia - Bounties)",
-    standingReward: 7500,
-    runTimeMinutes: 6,
-    exchangeArcanes: [
-      { name: "Melee Influence", urlName: "melee_influence", cost: 7500 },
-      { name: "Melee Exposure", urlName: "melee_exposure", cost: 7500 },
-      { name: "Melee Animosity", urlName: "melee_animosity", cost: 7500 }
-    ],
-    directDrops: [
-      { name: "Melee Crescendo", urlName: "melee_crescendo", chance: 0.05 },
-      { name: "Melee Duplicate", urlName: "melee_duplicate", chance: 0.05 }
+    id: "arbiters_hexis",
+    name: "Arbitres de Hexis (Arbiters of Hexis)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Seeking Shuriken (Mod d'Augmentation)", urlName: "seeking_shuriken", cost: 25000 },
+      { name: "Telos Boltace (Arme de Syndicat)", urlName: "telos_boltace", cost: 100000 }
+    ]
+  },
+  {
+    id: "cephalon_suda",
+    name: "Céphalon Suda (Cephalon Suda)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Resonance (Mod d'Augmentation)", urlName: "resonance", cost: 25000 },
+      { name: "Synoid Gammacor (Arme de Syndicat)", urlName: "synoid_gammacor", cost: 100000 }
+    ]
+  },
+  {
+    id: "perrin_sequence",
+    name: "Séquence Perrin (Perrin Sequence)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Eternal War (Mod d'Augmentation)", urlName: "eternal_war", cost: 25000 },
+      { name: "Secura Penta (Arme de Syndicat)", urlName: "secura_penta", cost: 100000 }
+    ]
+  },
+  {
+    id: "red_veil",
+    name: "Voile Rouge (Red Veil)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Despoil (Mod d'Augmentation)", urlName: "despoil", cost: 25000 },
+      { name: "Rakta Cernos (Arme de Syndicat)", urlName: "rakta_cernos", cost: 100000 }
+    ]
+  },
+  {
+    id: "new_loka",
+    name: "Nouveau Loka (New Loka)",
+    category: "Classique",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Pilfering Swarm (Mod d'Augmentation)", urlName: "pilfering_swarm", cost: 25000 },
+      { name: "Sancti Tigris (Arme de Syndicat)", urlName: "sancti_tigris", cost: 100000 }
+    ]
+  },
+  // Syndicats de Mondes Ouverts
+  {
+    id: "ostron",
+    name: "Ostron (Cetus)",
+    category: "Monde Ouvert",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Magus Elevate (Arcane)", urlName: "magus_elevate", cost: 10000 },
+      { name: "Magus Husk (Arcane)", urlName: "magus_husk", cost: 10000 }
+    ]
+  },
+  {
+    id: "solaris_united",
+    name: "Solaris Uni (Fortuna / Vox)",
+    category: "Monde Ouvert",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Magus Lockdown (Arcane)", urlName: "magus_lockdown", cost: 10000 },
+      { name: "Magus Melt (Arcane)", urlName: "magus_melt", cost: 10000 }
+    ]
+  },
+  {
+    id: "holdfasts",
+    name: "Plumes (Zariman)",
+    category: "Monde Ouvert",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Molt Augmented (Arcane)", urlName: "molt_augmented", cost: 10000 },
+      { name: "Molt Efficiency (Arcane)", urlName: "molt_efficiency", cost: 10000 }
+    ]
+  },
+  {
+    id: "cavia",
+    name: "Cavia (Deimos)",
+    category: "Monde Ouvert",
+    maxStanding: 132000,
+    exchangeItems: [
+      { name: "Melee Influence (Arcane)", urlName: "melee_influence", cost: 7500 },
+      { name: "Melee Exposure (Arcane)", urlName: "melee_exposure", cost: 7500 }
     ]
   }
 ];
 
-// 5. Nouvelles Données de Farms de Mods (Arbitrage, Steel Path, Mises à prix de Mods)
+// 5. Farms de Mods
 export interface ModFarmItem {
   name: string;
   urlName: string;
   chance: number;
-  cost?: number; // Coût en monnaie d'activité (Vitus / Steel Essence)
+  cost?: number;
 }
 
 export interface ModFarmActivity {
@@ -259,7 +384,7 @@ export interface ModFarmActivity {
   name: string;
   description: string;
   currencyName: string;
-  currencyUrlName?: string; // Si échangeable (ex: Steel Essence pour Relic Packs)
+  currencyUrlName?: string;
   runTimeMinutes: number;
   rewards: ModFarmItem[];
 }
@@ -270,7 +395,7 @@ export const MOD_FARM_ACTIVITIES: ModFarmActivity[] = [
     name: "Arbitrages (Alerte Spéciale)",
     description: "Survivez aux missions d'Arbitrage pour obtenir de l'Essence Vitus sur les drones et acheter des mods Galvanisés.",
     currencyName: "Essence Vitus",
-    runTimeMinutes: 20, // 20 minutes typiques de run
+    runTimeMinutes: 20,
     rewards: [
       { name: "Galvanized Chamber", urlName: "galvanized_chamber", chance: 1.0, cost: 20 },
       { name: "Galvanized Diffusion", urlName: "galvanized_diffusion", chance: 1.0, cost: 20 },
@@ -285,11 +410,11 @@ export const MOD_FARM_ACTIVITIES: ModFarmActivity[] = [
     description: "Affrontez les Acolytes qui apparaissent toutes les 4-5 minutes en Steel Path pour obtenir de l'Essence d'Acier et des Arcanes.",
     currencyName: "Essence d'Acier",
     currencyUrlName: "steel_essence",
-    runTimeMinutes: 30, // 30 minutes de run SP
+    runTimeMinutes: 30,
     rewards: [
       { name: "Primary Merciless (Arcane Drop)", urlName: "primary_merciless", chance: 0.4 },
       { name: "Secondary Merciless (Arcane Drop)", urlName: "secondary_merciless", chance: 0.3 },
-      { name: "Relic Pack (Teshin - 15 Essences)", urlName: "relic_pack", chance: 1.0, cost: 15 } // Reliques converties en valeur moyenne de PL
+      { name: "Relic Pack (Teshin - 15 Essences)", urlName: "relic_pack", chance: 1.0, cost: 15 }
     ]
   },
   {
