@@ -13,12 +13,12 @@ export const ArcaneTracker: React.FC<ArcaneTrackerProps> = ({ prices, refreshPri
   const [filterSource, setFilterSource] = useState<string>("Tous");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
   const [sortField, setSortField] = useState<SortField>("price");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   const handleRefreshAll = async () => {
     setIsRefreshing(true);
-    // Filtrer les arcanes de la catégorie en cours pour l'actualisation
     const listToRefresh = ARCANES.filter(
       (a) => filterSource === "Tous" || a.source === filterSource
     );
@@ -26,6 +26,14 @@ export const ArcaneTracker: React.FC<ArcaneTrackerProps> = ({ prices, refreshPri
       await refreshPrice(arcane.urlName);
     }
     setIsRefreshing(false);
+  };
+
+  const handleRefreshAllArcanes = async () => {
+    setIsRefreshingAll(true);
+    for (const arcane of ARCANES) {
+      await refreshPrice(arcane.urlName);
+    }
+    setIsRefreshingAll(false);
   };
 
   const sources = ["Tous", "Eidolons", "Zariman", "Cavia", "Fortuna", "Cetus", "Steel Path"];
@@ -74,11 +82,21 @@ export const ArcaneTracker: React.FC<ArcaneTrackerProps> = ({ prices, refreshPri
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-purple glow-gold">Base de Données des Arcanes</h1>
-        <p style={styles.subtitle}>
-          Comparez les prix des Arcanes de toutes les activités de farm et visualisez leur valeur à l'unité (Rang 0) et au Rang Max (Rang 5).
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-purple glow-gold">Base de Données des Arcanes</h1>
+          <p style={styles.subtitle}>
+            Comparez les prix des Arcanes de toutes les activités de farm et visualisez leur valeur à l'unité (Rang 0) et au Rang Max (Rang 5).
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAllArcanes}
+          disabled={isRefreshingAll}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshingAll ? "Chargement..." : "🔄 Actualiser tous les Arcanes"}
+        </button>
       </div>
 
       {/* Control Panel: Filters & Search */}
@@ -185,8 +203,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",

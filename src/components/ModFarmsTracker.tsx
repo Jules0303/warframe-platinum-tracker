@@ -10,6 +10,7 @@ interface ModFarmsTrackerProps {
 export const ModFarmsTracker: React.FC<ModFarmsTrackerProps> = ({ prices, refreshPrice }) => {
   const [selectedActivity, setSelectedActivity] = useState<ModFarmActivity>(MOD_FARM_ACTIVITIES[0]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
   const [customTime, setCustomTime] = useState<number>(selectedActivity.runTimeMinutes);
 
   const selectActivity = (act: ModFarmActivity) => {
@@ -25,17 +26,41 @@ export const ModFarmsTracker: React.FC<ModFarmsTrackerProps> = ({ prices, refres
     setIsRefreshing(false);
   };
 
+  const handleRefreshAllModFarms = async () => {
+    setIsRefreshingAll(true);
+    const uniqueItems = new Set<string>();
+    MOD_FARM_ACTIVITIES.forEach((act) => {
+      act.rewards.forEach((r) => {
+        uniqueItems.add(r.urlName);
+      });
+    });
+    for (const urlName of uniqueItems) {
+      await refreshPrice(urlName);
+    }
+    setIsRefreshingAll(false);
+  };
+
   const { totalEV, currencyEV, dropsEV } = calculateModFarmEV(selectedActivity, prices);
   // Calcul horaire
   const plPerHour = Math.round(totalEV * (60 / customTime));
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-blue glow-gold">Tracker de Farms de Mods</h1>
-        <p style={styles.subtitle}>
-          Estimez l'efficacité horaire des Arbitrages, du Steel Path et des mises à prix spéciales des Plaines d'Eidolon.
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-blue glow-gold">Tracker de Farms de Mods</h1>
+          <p style={styles.subtitle}>
+            Estimez l'efficacité horaire des Arbitrages, du Steel Path et des mises à prix spéciales des Plaines d'Eidolon.
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAllModFarms}
+          disabled={isRefreshingAll}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshingAll ? "Chargement..." : "🔄 Actualiser tous les Farms"}
+        </button>
       </div>
 
       {/* Activity Selector */}
@@ -194,8 +219,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "32px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",

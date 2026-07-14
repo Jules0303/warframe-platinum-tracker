@@ -34,11 +34,21 @@ export const CorruptedModsTracker: React.FC<CorruptedModsTrackerProps> = ({ pric
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-blue glow-blue">Farming de Soutes Deimos</h1>
-        <p style={styles.subtitle}>
-          Optimisez votre farm de soutes Orokin (Mods Corrompus) en analysant l'espérance de gain globale de cette activité.
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-blue glow-blue">Farming de Soutes Deimos</h1>
+          <p style={styles.subtitle}>
+            Optimisez votre farm de soutes Orokin (Mods Corrompus) en analysant l'espérance de gain globale de cette activité.
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAll}
+          disabled={isRefreshing}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshing ? "Chargement..." : "🔄 Actualiser tous les Mods"}
+        </button>
       </div>
 
       <div style={styles.mainLayout}>
@@ -169,8 +179,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "32px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",

@@ -10,6 +10,7 @@ interface BountyTrackerProps {
 export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPrice }) => {
   const [selectedSyndicate, setSelectedSyndicate] = useState<Syndicate>(SYNDICATES[0]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>("Tous");
 
   const handleRefreshAll = async () => {
@@ -18,6 +19,20 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
       await refreshPrice(item.urlName);
     }
     setIsRefreshing(false);
+  };
+
+  const handleRefreshAllSyndicates = async () => {
+    setIsRefreshingAll(true);
+    const uniqueItems = new Set<string>();
+    SYNDICATES.forEach((syn) => {
+      syn.exchangeItems.forEach((item) => {
+        uniqueItems.add(item.urlName);
+      });
+    });
+    for (const urlName of uniqueItems) {
+      await refreshPrice(urlName);
+    }
+    setIsRefreshingAll(false);
   };
 
   // Calculer la conversion pour tous les syndicats
@@ -45,11 +60,21 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-purple glow-gold">Comparateur de Syndicats & Réputations</h1>
-        <p style={styles.subtitle}>
-          Comparez le taux de conversion en platines de vos points de réputation à travers tous les syndicats du jeu.
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-purple glow-gold">Comparateur de Syndicats & Réputations</h1>
+          <p style={styles.subtitle}>
+            Comparez le taux de conversion en platines de vos points de réputation à travers tous les syndicats du jeu.
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAllSyndicates}
+          disabled={isRefreshingAll}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshingAll ? "Chargement..." : "🔄 Actualiser tous les Syndicats"}
+        </button>
       </div>
 
       {/* Filter Tabs */}
@@ -208,8 +233,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",

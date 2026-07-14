@@ -76,7 +76,7 @@ function App() {
       
       <main className="container" style={styles.main}>
         {activeTab === "dashboard" && (
-          <Dashboard prices={prices} setActiveTab={setActiveTab} />
+          <Dashboard prices={prices} setActiveTab={setActiveTab} refreshPrice={refreshPrice} />
         )}
         {activeTab === "relics" && (
           <RelicTracker prices={prices} refreshPrice={refreshPrice} />

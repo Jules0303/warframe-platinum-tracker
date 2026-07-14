@@ -12,8 +12,25 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
   const [selectedRelic, setSelectedRelic] = useState<Relic>(RELICS[0]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
 
   const selectRelic = (relic: Relic) => setSelectedRelic(relic);
+
+  const handleRefreshAllRelics = async () => {
+    setIsRefreshingAll(true);
+    const uniqueItems = new Set<string>();
+    visibleRelics.forEach((relic) => {
+      relic.drops.forEach((drop) => {
+        if (drop.urlName !== "forma_blueprint") {
+          uniqueItems.add(drop.urlName);
+        }
+      });
+    });
+    for (const urlName of uniqueItems) {
+      await refreshPrice(urlName);
+    }
+    setIsRefreshingAll(false);
+  };
 
   // Filtrer les reliques selon la recherche et le statut vaulted
   const visibleRelics = RELICS.filter((relic) => {
@@ -67,11 +84,21 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-gold glow-gold">Calculateur de Reliques</h1>
-        <p style={styles.subtitle}>
-          Identifiez les reliques les plus rentables du marché et comparez les espérances de gains (EV).
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-gold glow-gold">Calculateur de Reliques</h1>
+          <p style={styles.subtitle}>
+            Identifiez les reliques les plus rentables du marché et comparez les espérances de gains (EV).
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAllRelics}
+          disabled={isRefreshingAll}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshingAll ? "Chargement..." : "🔄 Actualiser toutes les Reliques"}
+        </button>
       </div>
 
       {/* Control Panel: Hide Vaulted & Search */}
@@ -295,8 +322,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",

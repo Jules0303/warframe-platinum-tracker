@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RELICS, CORRUPTED_MODS, SYNDICATES, MOD_FARM_ACTIVITIES } from "../services/relicData";
 import {
   calculateRadshareEV,
@@ -11,9 +11,22 @@ import {
 interface DashboardProps {
   prices: Record<string, number>;
   setActiveTab: (tab: string) => void;
+  refreshPrice: (urlName: string) => Promise<number>;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refreshPrice }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshAll = async () => {
+    setIsRefreshing(true);
+    const keys = Object.keys(prices);
+    for (const key of keys) {
+      if (key !== "forma_blueprint") {
+        await refreshPrice(key);
+      }
+    }
+    setIsRefreshing(false);
+  };
   // 1. Calculs des rentabilités pour chaque activité
 
   // Reliques : On prend une relique unvaulted active, ex: Axi B7 (Gauss Blueprint)
@@ -124,11 +137,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab }) =>
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-purple glow-purple">Activités les plus Rentables</h1>
-        <p style={styles.subtitle}>
-          Classement en temps réel des méthodes de farm basées sur les prix actuels de Warframe.market.
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-purple glow-purple">Activités les plus Rentables</h1>
+          <p style={styles.subtitle}>
+            Classement en temps réel des méthodes de farm basées sur les prix actuels de Warframe.market.
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAll}
+          disabled={isRefreshing}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshing ? "Chargement..." : "🔄 Actualiser tout le Marché"}
+        </button>
       </div>
 
       {/* Grid of Main Stats */}
@@ -206,8 +229,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "32px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",
