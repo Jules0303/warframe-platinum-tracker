@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { RELICS, CORRUPTED_MODS, SYNDICATES, MOD_FARM_ACTIVITIES } from "../services/relicData";
+import { type Relic, CORRUPTED_MODS, SYNDICATES, MOD_FARM_ACTIVITIES } from "../services/relicData";
 import { PlatinumIcon } from "./Icons";
 import {
   calculateRadshareEV,
@@ -13,9 +13,10 @@ interface DashboardProps {
   prices: Record<string, number>;
   setActiveTab: (tab: string) => void;
   refreshPrice: (urlName: string) => Promise<number>;
+  relics: Relic[];
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refreshPrice }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refreshPrice, relics }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefreshAll = async () => {
@@ -31,7 +32,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refr
   // 1. Calculs des rentabilités pour chaque activité
 
   // Reliques : On prend une relique unvaulted active, ex: Axi B7 (Gauss Blueprint)
-  const bestRelic = RELICS.find(r => r.status === "Unvaulted" && r.era === "Axi") || RELICS[0];
+  const bestRelic = relics.find(r => r.status === "Unvaulted" && r.era === "Axi") || relics[0];
   const relicRadshareEV = calculateRadshareEV(bestRelic, prices);
   const relicTimeMin = 4;
   const relicHourProfit = Math.round(relicRadshareEV * (60 / relicTimeMin));

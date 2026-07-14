@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { RELICS, type Relic } from "../services/relicData";
+import { type Relic } from "../services/relicData";
 import { calculateSoloEV, calculateRadshareEV } from "../utils/calculations";
 import { PlatinumIcon, RelicIcon } from "./Icons";
 
 interface RelicTrackerProps {
   prices: Record<string, number>;
   refreshPrice: (urlName: string) => Promise<number>;
+  relics: Relic[];
 }
 
-export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice }) => {
+export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice, relics }) => {
   const [hideVaulted, setHideVaulted] = useState<boolean>(true);
-  const [selectedRelic, setSelectedRelic] = useState<Relic>(RELICS[0]);
+  const [selectedRelic, setSelectedRelic] = useState<Relic>(relics[0]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isRefreshingAll, setIsRefreshingAll] = useState(false);
@@ -34,7 +35,7 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
   };
 
   // Filtrer les reliques selon la recherche et le statut vaulted
-  const visibleRelics = RELICS.filter((relic) => {
+  const visibleRelics = relics.filter((relic) => {
     const matchesSearch = 
       relic.era.toLowerCase().includes(searchQuery.toLowerCase()) || 
       relic.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -61,8 +62,8 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
   // Top 5 des meilleures reliques
   const top5Relics = relicsWithEV.slice(0, 5);
 
-  const activeRelicObj = relicsWithEV.find((r) => r.relic.name === selectedRelic.name) || relicsWithEV[0] || {
-    relic: RELICS[0],
+  const activeRelicObj = relicsWithEV.find((r) => r.relic.name === selectedRelic?.name && r.relic.era === selectedRelic?.era) || relicsWithEV[0] || {
+    relic: relics[0],
     evRadshare: 0,
     evSoloRadiant: 0,
     evSoloIntact: 0

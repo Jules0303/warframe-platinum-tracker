@@ -8,10 +8,22 @@ import { ArcaneTracker } from "./components/ArcaneTracker";
 import { EidolonTracker } from "./components/EidolonTracker";
 import { BountyTracker } from "./components/BountyTracker";
 import { warframeMarket, FALLBACK_PRICES } from "./services/warframeMarket";
+import { RELICS, type Relic } from "./services/relicData";
+import { fetchAllRelics } from "./services/relicFetcher";
 
 function App() {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [prices, setPrices] = useState<Record<string, number>>({ ...FALLBACK_PRICES });
+  const [relics, setRelics] = useState<Relic[]>(RELICS);
+
+  // Charger toutes les reliques depuis l'API en arrière-plan
+  useEffect(() => {
+    const loadRelics = async () => {
+      const allRelics = await fetchAllRelics(RELICS);
+      setRelics(allRelics);
+    };
+    loadRelics();
+  }, []);
 
   // Effet de chargement initial et boucle de synchronisation lente en arrière-plan
   useEffect(() => {
@@ -76,10 +88,10 @@ function App() {
       
       <main className="container" style={styles.main}>
         {activeTab === "dashboard" && (
-          <Dashboard prices={prices} setActiveTab={setActiveTab} refreshPrice={refreshPrice} />
+          <Dashboard prices={prices} setActiveTab={setActiveTab} refreshPrice={refreshPrice} relics={relics} />
         )}
         {activeTab === "relics" && (
-          <RelicTracker prices={prices} refreshPrice={refreshPrice} />
+          <RelicTracker prices={prices} refreshPrice={refreshPrice} relics={relics} />
         )}
         {activeTab === "corrupted" && (
           <CorruptedModsTracker prices={prices} refreshPrice={refreshPrice} />
