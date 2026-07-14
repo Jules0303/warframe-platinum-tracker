@@ -24,7 +24,7 @@ export interface Arcane {
   source: string;
 }
 
-// 1. Base de données étendue de reliques (Gauss, Sevagoth, Wisp, Saryn, Volt, Nekros, Protea)
+// 1. Base de données étendue de reliques (+ de 20 reliques avec des drops réels)
 export const RELICS: Relic[] = [
   // SEVAGOTH PRIME (Actif - Unvaulted)
   {
@@ -79,6 +79,7 @@ export const RELICS: Relic[] = [
       { name: "Sevagoth Prime Chassis", urlName: "sevagoth_prime_chassis", rarity: "rare" }
     ]
   },
+  
   // GAUSS PRIME (Actif - Unvaulted)
   {
     era: "Axi",
@@ -106,6 +107,35 @@ export const RELICS: Relic[] = [
       { name: "Gauss Prime Chassis", urlName: "gauss_prime_chassis", rarity: "rare" }
     ]
   },
+
+  // REVENANT PRIME (Actif - Unvaulted)
+  {
+    era: "Lith",
+    name: "R11",
+    status: "Unvaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Tatsu Prime Handle", urlName: "tatsu_prime_handle", rarity: "common" },
+      { name: "Revenant Prime Chassis", urlName: "revenant_prime_chassis", rarity: "common" },
+      { name: "Phantasma Prime Receiver", urlName: "phantasma_prime_receiver", rarity: "uncommon" },
+      { name: "Revenant Prime Systems", urlName: "revenant_prime_systems", rarity: "uncommon" },
+      { name: "Revenant Prime Blueprint", urlName: "revenant_prime_blueprint", rarity: "rare" }
+    ]
+  },
+  {
+    era: "Meso",
+    name: "R6",
+    status: "Unvaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Tatsu Prime Blueprint", urlName: "tatsu_prime_blueprint", rarity: "common" },
+      { name: "Phantasma Prime Stock", urlName: "phantasma_prime_stock", rarity: "common" },
+      { name: "Revenant Prime Neuroptics", urlName: "revenant_prime_neuroptics", rarity: "uncommon" },
+      { name: "Phantasma Prime Blueprint", urlName: "phantasma_prime_blueprint", rarity: "uncommon" },
+      { name: "Revenant Prime Blueprint", urlName: "revenant_prime_blueprint", rarity: "rare" }
+    ]
+  },
+
   // WISP PRIME (Resurgence)
   {
     era: "Meso",
@@ -120,20 +150,134 @@ export const RELICS: Relic[] = [
       { name: "Wisp Prime Blueprint", urlName: "wisp_prime_blueprint", rarity: "rare" }
     ]
   },
-  // PROTEA PRIME (Vaulted)
+  {
+    era: "Lith",
+    name: "W3",
+    status: "Resurgence",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Orthos Prime Blueprint", urlName: "orthos_prime_blueprint", rarity: "common" },
+      { name: "Burston Prime Stock", urlName: "burston_prime_stock", rarity: "common" },
+      { name: "Wisp Prime Neuroptics Blueprint", urlName: "wisp_prime_neuroptics", rarity: "uncommon" },
+      { name: "Fulmin Prime Barrel", urlName: "fulmin_prime_barrel", rarity: "uncommon" },
+      { name: "Wisp Prime Blueprint", urlName: "wisp_prime_blueprint", rarity: "rare" }
+    ]
+  },
+
+  // PROTEA PRIME (Actif - Unvaulted)
+  {
+    era: "Lith",
+    name: "P9",
+    status: "Unvaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Velox Prime Blueprint", urlName: "velox_prime_blueprint", rarity: "common" },
+      { name: "Protea Prime Neuroptics", urlName: "protea_prime_neuroptics", rarity: "common" },
+      { name: "Okina Prime Blade", urlName: "okina_prime_blade", rarity: "uncommon" },
+      { name: "Protea Prime Systems", urlName: "protea_prime_systems", rarity: "uncommon" },
+      { name: "Protea Prime Blueprint", urlName: "protea_prime_blueprint", rarity: "rare" }
+    ]
+  },
   {
     era: "Axi",
-    name: "P7",
+    name: "P11",
+    status: "Unvaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Okina Prime Blueprint", urlName: "okina_prime_blueprint", rarity: "common" },
+      { name: "Velox Prime Barrel", urlName: "velox_prime_barrel", rarity: "common" },
+      { name: "Okina Prime Handle", urlName: "okina_prime_handle", rarity: "uncommon" },
+      { name: "Velox Prime Receiver", urlName: "velox_prime_receiver", rarity: "uncommon" },
+      { name: "Protea Prime Chassis", urlName: "protea_prime_chassis", rarity: "rare" }
+    ]
+  },
+
+  // HILDRYN PRIME (Vaulted)
+  {
+    era: "Lith",
+    name: "H9",
     status: "Vaulted",
     drops: [
       { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
-      { name: "Burston Prime Stock", urlName: "burston_prime_stock", rarity: "common" },
-      { name: "Orthos Prime Blueprint", urlName: "orthos_prime_blueprint", rarity: "common" },
-      { name: "Protea Prime Neuroptics Blueprint", urlName: "protea_prime_neuroptics", rarity: "uncommon" },
-      { name: "Velox Prime Barrel", urlName: "velox_prime_barrel", rarity: "uncommon" },
-      { name: "Protea Prime Chassis Blueprint", urlName: "protea_prime_chassis", rarity: "rare" }
+      { name: "Larkspur Prime Blueprint", urlName: "larkspur_prime_blueprint", rarity: "common" },
+      { name: "Hildryn Prime Chassis", urlName: "hildryn_prime_chassis", rarity: "common" },
+      { name: "Larkspur Prime Barrel", urlName: "larkspur_prime_barrel", rarity: "uncommon" },
+      { name: "Shade Prime Systems", urlName: "shade_prime_systems", rarity: "uncommon" },
+      { name: "Hildryn Prime Blueprint", urlName: "hildryn_prime_blueprint", rarity: "rare" }
     ]
   },
+  {
+    era: "Meso",
+    name: "H5",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Shade Prime Blueprint", urlName: "shade_prime_blueprint", rarity: "common" },
+      { name: "Hildryn Prime Neuroptics", urlName: "hildryn_prime_neuroptics", rarity: "common" },
+      { name: "Larkspur Prime Stock", urlName: "larkspur_prime_stock", rarity: "uncommon" },
+      { name: "Hildryn Prime Systems", urlName: "hildryn_prime_systems", rarity: "uncommon" },
+      { name: "Shade Prime Burst Laser Receiver", urlName: "shade_prime_burst_laser_receiver", rarity: "rare" }
+    ]
+  },
+
+  // KHORA PRIME (Vaulted)
+  {
+    era: "Meso",
+    name: "K11",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Hystrix Prime Barrel", urlName: "hystrix_prime_barrel", rarity: "common" },
+      { name: "Khora Prime Neuroptics", urlName: "khora_prime_neuroptics", rarity: "common" },
+      { name: "Dual Keres Prime Blueprint", urlName: "dual_keres_prime_blueprint", rarity: "uncommon" },
+      { name: "Khora Prime Chassis", urlName: "khora_prime_chassis", rarity: "uncommon" },
+      { name: "Khora Prime Blueprint", urlName: "khora_prime_blueprint", rarity: "rare" }
+    ]
+  },
+  {
+    era: "Neo",
+    name: "K5",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Hystrix Prime Blueprint", urlName: "hystrix_prime_blueprint", rarity: "common" },
+      { name: "Khora Prime Systems", urlName: "khora_prime_systems", rarity: "common" },
+      { name: "Dual Keres Prime Handle", urlName: "dual_keres_prime_handle", rarity: "uncommon" },
+      { name: "Hystrix Prime Receiver", urlName: "hystrix_prime_receiver", rarity: "uncommon" },
+      { name: "Dual Keres Prime Blade", urlName: "dual_keres_prime_blade", rarity: "rare" }
+    ]
+  },
+
+  // BARUUK PRIME (Vaulted)
+  {
+    era: "Neo",
+    name: "B8",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Afentis Prime Blueprint", urlName: "afentis_prime_blueprint", rarity: "common" },
+      { name: "Baruuk Prime Neuroptics", urlName: "baruuk_prime_neuroptics", rarity: "common" },
+      { name: "Cobra & Crane Prime Blueprint", urlName: "cobra_crane_prime_blueprint", rarity: "uncommon" },
+      { name: "Baruuk Prime Systems", urlName: "baruuk_prime_systems", rarity: "uncommon" },
+      { name: "Baruuk Prime Blueprint", urlName: "baruuk_prime_blueprint", rarity: "rare" }
+    ]
+  },
+
+  // WUKONG PRIME (Vaulted)
+  {
+    era: "Lith",
+    name: "W2",
+    status: "Vaulted",
+    drops: [
+      { name: "Forma Blueprint", urlName: "forma_blueprint", rarity: "common" },
+      { name: "Zhuge Prime Barrel", urlName: "zhuge_prime_barrel", rarity: "common" },
+      { name: "Wukong Prime Neuroptics", urlName: "wukong_prime_neuroptics", rarity: "common" },
+      { name: "Zhuge Prime Blueprint", urlName: "zhuge_prime_blueprint", rarity: "uncommon" },
+      { name: "Wukong Prime Systems", urlName: "wukong_prime_systems", rarity: "uncommon" },
+      { name: "Wukong Prime Blueprint", urlName: "wukong_prime_blueprint", rarity: "rare" }
+    ]
+  },
+
   // SARYN PRIME (Vaulted)
   {
     era: "Lith",
@@ -148,6 +292,7 @@ export const RELICS: Relic[] = [
       { name: "Saryn Prime Blueprint", urlName: "saryn_prime_blueprint", rarity: "rare" }
     ]
   },
+  
   // VOLT PRIME (Vaulted)
   {
     era: "Neo",
@@ -162,6 +307,7 @@ export const RELICS: Relic[] = [
       { name: "Volt Prime Blueprint", urlName: "volt_prime_blueprint", rarity: "rare" }
     ]
   },
+
   // NEKROS PRIME (Vaulted)
   {
     era: "Axi",

@@ -41,11 +41,65 @@ export const FALLBACK_PRICES: Record<string, number> = {
   "lex_prime_barrel": 2,
   "fang_prime_blade": 2,
   
-  // Wisp (Resurgence)
+  // Revenant Prime (Actif)
+  "tatsu_prime_handle": 3,
+  "tatsu_prime_blueprint": 4,
+  "phantasma_prime_receiver": 4,
+  "phantasma_prime_stock": 3,
+  "phantasma_prime_blueprint": 3,
+  "spira_prime_blade": 10,
+  "spira_prime_blueprint": 15,
+  "revenant_prime_chassis": 5,
+  "revenant_prime_systems": 12,
+  "revenant_prime_blueprint": 45,
+  "revenant_prime_neuroptics": 10,
+  
+  // Wisp & Protea & Hildryn & Khora & Baruuk & Wukong
   "wisp_prime_blueprint": 30,
   "wisp_prime_chassis": 12,
   "wisp_prime_systems": 10,
   "wisp_prime_neuroptics": 10,
+  "fulmin_prime_barrel": 6,
+  "velox_prime_blueprint": 5,
+  "okina_prime_blade": 12,
+  "okina_prime_blueprint": 12,
+  "okina_prime_handle": 8,
+  "velox_prime_receiver": 5,
+  "protea_prime_blueprint": 35,
+  "protea_prime_chassis": 40,
+  "protea_prime_neuroptics": 15,
+  "protea_prime_systems": 10,
+  "larkspur_prime_blueprint": 8,
+  "larkspur_prime_barrel": 6,
+  "larkspur_prime_stock": 6,
+  "hildryn_prime_chassis": 6,
+  "hildryn_prime_neuroptics": 12,
+  "hildryn_prime_systems": 5,
+  "hildryn_prime_blueprint": 30,
+  "shade_prime_systems": 8,
+  "shade_prime_blueprint": 10,
+  "shade_prime_burst_laser_receiver": 15,
+  "hystrix_prime_barrel": 6,
+  "khora_prime_neuroptics": 5,
+  "dual_keres_prime_blueprint": 6,
+  "khora_prime_chassis": 10,
+  "khora_prime_blueprint": 35,
+  "hystrix_prime_blueprint": 5,
+  "khora_prime_systems": 6,
+  "dual_keres_prime_handle": 10,
+  "hystrix_prime_receiver": 6,
+  "dual_keres_prime_blade": 15,
+  "afentis_prime_blueprint": 6,
+  "baruuk_prime_neuroptics": 5,
+  "cobra_crane_prime_blueprint": 5,
+  "baruuk_prime_systems": 10,
+  "baruuk_prime_blueprint": 30,
+  "zhuge_prime_barrel": 5,
+  "wukong_prime_neuroptics": 8,
+  "zhuge_prime_blueprint": 5,
+  "wukong_prime_systems": 8,
+  "wukong_prime_blueprint": 80,
+  "wukong_prime_chassis": 15,
   
   // Saryn & Volt & Nekros (Vaulted)
   "saryn_prime_blueprint": 45,
@@ -56,6 +110,8 @@ export const FALLBACK_PRICES: Record<string, number> = {
   "nekros_prime_blueprint": 40,
   "nekros_prime_systems": 15,
   "nekros_prime_neuroptics": 15,
+  "dakra_prime_blade": 10,
+  "carrier_prime_systems": 12,
   
   "forma_blueprint": 0, // Non échangeable
   
@@ -117,6 +173,12 @@ export const FALLBACK_PRICES: Record<string, number> = {
   // Zariman Bounty direct drops
   "gyre_blueprint": 10,
   "void_thrax_plasm": 1, // par unité
+  
+  // Fortuna & Cetus Arcanes
+  "magus_lockdown": 12,
+  "magus_melt": 6,
+  "magus_elevate": 15,
+  "magus_husk": 8,
 
   // Nouveaux Farms de Mods (Arbitrage / Steel Path / Plains)
   "galvanized_chamber": 18,
@@ -130,6 +192,20 @@ export const FALLBACK_PRICES: Record<string, number> = {
   "gladiator_might": 12,
   "augur_secrets": 18,
   "vigilante_armaments": 4,
+  
+  // Syndicates classique items
+  "mesa_waltz": 12,
+  "vaykor_marelok": 35,
+  "seeking_shuriken": 12,
+  "telos_boltace": 35,
+  "resonance": 12,
+  "synoid_gammacor": 35,
+  "eternal_war": 12,
+  "secura_penta": 35,
+  "despoil": 12,
+  "rakta_cernos": 35,
+  "pilfering_swarm": 12,
+  "sancti_tigris": 35,
 };
 
 class WarframeMarketService {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CORRUPTED_MODS } from "../services/relicData";
 import { calculateCorruptedModsEV } from "../utils/calculations";
+import { PlatinumIcon } from "./Icons";
 
 interface CorruptedModsTrackerProps {
   prices: Record<string, number>;
@@ -70,7 +71,8 @@ export const CorruptedModsTracker: React.FC<CorruptedModsTrackerProps> = ({ pric
             <div style={styles.statBox}>
               <span style={styles.statLabel}>Espérance par Soute</span>
               <span className="plat-price plat-price-gold" style={styles.statValue}>
-                {ev.toFixed(2)} PL
+                <PlatinumIcon size={16} style={{ marginRight: "4px" }} />
+                {ev.toFixed(2)}
               </span>
               <span style={styles.statSub}>1 chance sur 24 par mod</span>
             </div>
@@ -78,7 +80,8 @@ export const CorruptedModsTracker: React.FC<CorruptedModsTrackerProps> = ({ pric
             <div style={styles.statBoxHighlight}>
               <span style={styles.statLabelHighlight}>Gains Horaires Estimés</span>
               <span className="plat-price plat-price-gold" style={styles.statValueHighlight}>
-                {plPerHour} <span style={{ fontSize: "14px", fontWeight: "normal" }}>PL / h</span>
+                <PlatinumIcon size={18} style={{ marginRight: "6px" }} />
+                {plPerHour} <span style={{ fontSize: "11px", color: "var(--text-secondary)", fontWeight: "normal" }}>/ h</span>
               </span>
               <span style={styles.statSubHighlight}>Basé sur vos performances</span>
             </div>
@@ -160,7 +163,8 @@ export const CorruptedModsTracker: React.FC<CorruptedModsTrackerProps> = ({ pric
                       </td>
                       <td>
                         <span className={`plat-price ${isValuable ? 'plat-price-gold' : ''}`} style={{ fontWeight: 600 }}>
-                          {price} PL
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {price}
                         </span>
                       </td>
                     </tr>

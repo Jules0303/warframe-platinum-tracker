@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MOD_FARM_ACTIVITIES, type ModFarmActivity } from "../services/relicData";
 import { calculateModFarmEV } from "../utils/calculations";
+import { PlatinumIcon } from "./Icons";
 
 interface ModFarmsTrackerProps {
   prices: Record<string, number>;
@@ -102,11 +103,12 @@ export const ModFarmsTracker: React.FC<ModFarmsTrackerProps> = ({ prices, refres
             <div style={styles.statBox}>
               <span style={styles.statLabel}>EV Moyenne par Run</span>
               <span className="plat-price plat-price-gold" style={styles.statValue}>
-                {totalEV.toFixed(1)} PL
+                <PlatinumIcon size={16} style={{ marginRight: "4px" }} />
+                {totalEV.toFixed(1)}
               </span>
               <span style={styles.statSub}>
                 {selectedActivity.id !== "plains_bounty" 
-                  ? `Monnaie : ${currencyEV.toFixed(1)} PL | Drops : ${dropsEV.toFixed(1)} PL`
+                  ? `Monnaie : ${currencyEV.toFixed(0)} | Drops : ${dropsEV.toFixed(0)}`
                   : "Drops directs uniquement"
                 }
               </span>
@@ -115,7 +117,8 @@ export const ModFarmsTracker: React.FC<ModFarmsTrackerProps> = ({ prices, refres
             <div style={styles.statBoxHighlight}>
               <span style={styles.statLabelHighlight}>Gains Horaires Estimés</span>
               <span className="plat-price plat-price-gold" style={styles.statValueHighlight}>
-                {plPerHour} <span style={{ fontSize: "14px", fontWeight: "normal" }}>PL / h</span>
+                <PlatinumIcon size={18} style={{ marginRight: "6px" }} />
+                {plPerHour} <span style={{ fontSize: "11px", color: "var(--text-secondary)", fontWeight: "normal" }}>/ h</span>
               </span>
               <span style={styles.statSubHighlight}>⏱️ Pour {customTime} minutes de farm</span>
             </div>
@@ -186,20 +189,22 @@ export const ModFarmsTracker: React.FC<ModFarmsTrackerProps> = ({ prices, refres
                   } else {
                     obtentionText = `Taux de Drop: ${(reward.chance * 100).toFixed(1)}%`;
                     const occurrences = selectedActivity.id === "arbitration" ? 4 : selectedActivity.id === "steel_path" ? 6 : 1;
-                    partialValueText = `~ ${(reward.chance * occurrences * price).toFixed(1)} PL`;
+                    partialValueText = `~ ${(reward.chance * occurrences * price).toFixed(1)}`;
                   }
 
                   return (
                     <tr key={reward.urlName}>
                       <td style={{ fontWeight: 600 }}>{reward.name}</td>
-                      <td style={{ color: "var(--text-secondary)" }}>{obtentionText}</td>
+                      <td style={{ color: "var(--text-secondary)", fontSize: "12px" }}>{obtentionText}</td>
                       <td>
-                        <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
-                          {price} PL
+                        <span className="plat-price plat-price-gold">
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {price}
                         </span>
                       </td>
                       <td>
-                        <span className="plat-price" style={{ color: "var(--text-secondary)", fontSize: "13px" }}>
+                        <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
+                          <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
                           {partialValueText}
                         </span>
                       </td>
@@ -284,7 +289,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "24px",
   },
   statBox: {
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     borderRadius: "8px",
     padding: "20px",
@@ -294,8 +299,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "8px",
   },
   statBoxHighlight: {
-    backgroundColor: "rgba(44, 94, 138, 0.04)",
-    border: "1px solid rgba(44, 94, 138, 0.18)",
+    backgroundColor: "#0c1521",
+    border: "1px solid rgba(0, 210, 255, 0.2)",
     borderRadius: "8px",
     padding: "20px",
     display: "flex",

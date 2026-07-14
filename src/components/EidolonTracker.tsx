@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { EIDOLON_ARCANES } from "../services/relicData";
 import { calculateEidolonEV } from "../utils/calculations";
+import { PlatinumIcon } from "./Icons";
 
 interface EidolonTrackerProps {
   prices: Record<string, number>;
@@ -39,11 +40,21 @@ export const EidolonTracker: React.FC<EidolonTrackerProps> = ({ prices, refreshP
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 className="title-grad-purple glow-purple">Calculateur d'Eidolons</h1>
-        <p style={styles.subtitle}>
-          Estimez vos gains de chasse aux Eidolons basés sur la rareté et les prix des Arcanes sur Warframe.market.
-        </p>
+      <div style={styles.headerRow}>
+        <div style={styles.header}>
+          <h1 className="title-grad-purple glow-purple">Calculateur d'Eidolons</h1>
+          <p style={styles.subtitle}>
+            Estimez vos gains de chasse aux Eidolons basés sur la rareté et les prix des Arcanes sur Warframe.market.
+          </p>
+        </div>
+        <button
+          className="btn btn-secondary"
+          onClick={handleRefreshAll}
+          disabled={isRefreshing}
+          style={{ padding: "10px 16px", alignSelf: "center" }}
+        >
+          {isRefreshing ? "Chargement..." : "🔄 Actualiser les Eidolons"}
+        </button>
       </div>
 
       <div style={styles.mainLayout}>
@@ -51,21 +62,14 @@ export const EidolonTracker: React.FC<EidolonTrackerProps> = ({ prices, refreshP
         <div className="glass-panel" style={styles.summaryCard}>
           <div style={styles.summaryTitleRow}>
             <h2 className="title-grad-purple">Rentabilité de la Chasse</h2>
-            <button
-              className="btn btn-secondary"
-              onClick={handleRefreshAll}
-              disabled={isRefreshing}
-              style={{ padding: "8px 12px", fontSize: "12px" }}
-            >
-              {isRefreshing ? "Chargement..." : "🔄 Actualiser Prix"}
-            </button>
           </div>
 
           <div style={styles.statGrid}>
             <div style={styles.statBox}>
               <span style={styles.statLabel}>EV par Run Tridolon (1x3)</span>
               <span className="plat-price" style={styles.statValue}>
-                {evPerTridolon.toFixed(1)} PL
+                <PlatinumIcon size={16} style={{ marginRight: "4px" }} />
+                {evPerTridolon.toFixed(1)}
               </span>
               <span style={styles.statSub}>1 Arcane par Eidolon capturé</span>
             </div>
@@ -73,9 +77,10 @@ export const EidolonTracker: React.FC<EidolonTrackerProps> = ({ prices, refreshP
             <div style={styles.statBoxHighlight}>
               <span style={styles.statLabelHighlight}>Gains par Nuit (50 min)</span>
               <span className="plat-price plat-price-gold" style={styles.statValueHighlight}>
-                {plPerNightCycle} PL
+                <PlatinumIcon size={18} style={{ marginRight: "6px" }} />
+                {plPerNightCycle}
               </span>
-              <span style={styles.statSubHighlight}>~ {plPerHour} PL / heure</span>
+              <span style={styles.statSubHighlight}>~ <PlatinumIcon size={11} style={{ marginRight: "3px" }} />{plPerHour} / heure</span>
             </div>
           </div>
 
@@ -153,7 +158,8 @@ export const EidolonTracker: React.FC<EidolonTrackerProps> = ({ prices, refreshP
                       </td>
                       <td>
                         <span className={`plat-price ${isEnergize ? 'plat-price-gold' : ''}`} style={{ fontWeight: 600 }}>
-                          {price} PL
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {price}
                         </span>
                       </td>
                     </tr>
@@ -172,8 +178,16 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     padding: "24px 0",
   },
-  header: {
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: "32px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  header: {
+    marginBottom: "0",
   },
   subtitle: {
     color: "var(--text-secondary)",
@@ -212,9 +226,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "8px",
   },
   statBoxHighlight: {
-    backgroundColor: "rgba(171, 71, 188, 0.05)",
+    backgroundColor: "#170b21",
     border: "1px solid rgba(171, 71, 188, 0.2)",
-    boxShadow: "0 0 15px rgba(171, 71, 188, 0.05)",
     borderRadius: "12px",
     padding: "20px",
     display: "flex",

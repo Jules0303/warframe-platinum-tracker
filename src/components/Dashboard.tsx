@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { RELICS, CORRUPTED_MODS, SYNDICATES, MOD_FARM_ACTIVITIES } from "../services/relicData";
+import { PlatinumIcon } from "./Icons";
 import {
   calculateRadshareEV,
   calculateCorruptedModsEV,
@@ -165,7 +166,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refr
         <div className="glass-panel" style={styles.statBox}>
           <span style={styles.statLabel}>Rentabilité Max Estimée</span>
           <span className="plat-price plat-price-gold" style={styles.statValue}>
-            {activities[0].profitPerHour} <span style={{fontSize: "14px", fontWeight: "normal"}}>PL / h</span>
+            <PlatinumIcon size={18} style={{ marginRight: "6px" }} />
+            {activities[0].profitPerHour} <span style={{fontSize: "12px", color: "var(--text-secondary)", fontWeight: "normal"}}>/ h</span>
           </span>
         </div>
         <div className="glass-panel" style={styles.statBox}>
@@ -201,13 +203,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ prices, setActiveTab, refr
               <div style={styles.metric}>
                 <span style={styles.metricLabel}>Profit estimé</span>
                 <span className="plat-price plat-price-gold" style={styles.metricValue}>
-                  {act.profitPerHour} <span style={styles.metricUnit}>PL/h</span>
+                  <PlatinumIcon size={15} style={{ marginRight: "4px" }} />
+                  {act.profitPerHour}<span style={styles.metricUnit}>/h</span>
                 </span>
               </div>
               <div style={styles.metric}>
                 <span style={styles.metricLabel}>Moyenne / Session</span>
-                <span className="plat-price" style={styles.metricValueSub}>
-                  {act.profitPerRun} PL
+                <span className="plat-price" style={{ ...styles.metricValueSub, color: "var(--text-primary)" }}>
+                  <PlatinumIcon size={12} style={{ marginRight: "4px" }} />
+                  {act.profitPerRun}
                 </span>
               </div>
             </div>
@@ -285,7 +289,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px",
   },
   rankBadge: {
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     padding: "3px 8px",
     borderRadius: "4px",
@@ -308,7 +312,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   metricsContainer: {
     display: "flex",
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     padding: "12px 16px",
     borderRadius: "6px",

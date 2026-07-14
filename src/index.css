@@ -1,52 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-
 :root {
-  --bg-color: #f7f6f2;
-  --bg-grid: rgba(184, 147, 85, 0.05);
-  --panel-bg: #ffffff;
-  --panel-bg-hover: #faf9f6;
-  --panel-border: #d5d1c4;
-  --panel-border-focus: #b89355;
+  /* Warframe / Warframe Market Theme Palette */
+  --bg-color: #06090c;
+  --panel-bg: #0d1217;
+  --panel-border: #1a232c;
+  --panel-border-hover: #293745;
   
-  --accent-gold: #a67c37;
-  --accent-gold-glow: rgba(166, 124, 55, 0.15);
-  --accent-blue: #2c5e8a;
-  --accent-blue-glow: rgba(44, 94, 138, 0.15);
-  --accent-purple: #7a359c;
-  --accent-purple-glow: rgba(122, 53, 156, 0.15);
+  --text-primary: #f0f2f5;
+  --text-secondary: #8c9ca7;
+  --text-muted: #576570;
   
-  --text-primary: #1c1a17;
-  --text-secondary: #5e5b52;
-  --text-muted: #8c887d;
+  --accent-gold: #cfa751;
+  --accent-gold-glow: rgba(207, 167, 81, 0.35);
   
-  --success: #388e3c;
-  --danger: #d32f2f;
-  --warning: #f57c00;
+  --accent-blue: #00d2ff;
+  --accent-blue-glow: rgba(0, 210, 255, 0.25);
   
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --shadow-lg: 0 8px 24px -4px rgba(90, 80, 70, 0.12);
-  --shadow-glow: 0 0 15px rgba(166, 124, 55, 0.1);
+  --accent-purple: #9d4edd;
+  
+  /* Status Colors */
+  --color-success: #2ebb7e;
+  --color-warning: #e09f3e;
+  --color-danger: #ea5455;
+  
+  --font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: var(--font-sans);
 }
 
 body {
   background-color: var(--bg-color);
-  background-image: 
-    linear-gradient(var(--bg-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-position: center;
   color: var(--text-primary);
-  min-height: 100vh;
-  overflow-x: hidden;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(13, 19, 26, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(207, 167, 81, 0.03) 0%, transparent 40%);
 }
 
 #root {
@@ -55,294 +51,252 @@ body {
   flex-direction: column;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-color);
-}
-::-webkit-scrollbar-thumb {
-  background: #d8d4c7;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-gold);
-}
-
-/* Common Layout Components */
 .container {
-  max-width: 1280px;
   width: 100%;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
-/* Glassmorphism/Warframe Panels */
+/* Glassmorphism panels */
 .glass-panel {
-  background: var(--panel-bg);
+  background-color: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 8px;
-  box-shadow: var(--shadow-lg);
-  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .glass-panel-hover:hover {
-  background: var(--panel-bg-hover);
-  border-color: var(--panel-border-focus);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px -4px rgba(90, 80, 70, 0.18), var(--shadow-glow);
+  border-color: var(--panel-border-hover);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
 }
 
-/* Typography & Titles */
-.title-grad-purple {
+/* Typography with Warframe flavor */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: 0.5px;
   color: var(--text-primary);
-  border-bottom: 2px solid var(--accent-gold);
-  display: inline-block;
-  padding-bottom: 6px;
 }
 
+/* Gradients for headings */
 .title-grad-gold {
   color: var(--accent-gold);
+  background: linear-gradient(135deg, #ffe0a3 0%, var(--accent-gold) 60%, #997833 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(207, 167, 81, 0.15);
 }
 
 .title-grad-blue {
   color: var(--accent-blue);
+  background: linear-gradient(135deg, #a3f1ff 0%, var(--accent-blue) 60%, #0088a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.glow-purple {
-  /* text-shadow: 0 0 10px rgba(122, 53, 156, 0.1); */
+.title-grad-purple {
+  color: var(--accent-purple);
+  background: linear-gradient(135deg, #e3c4ff 0%, var(--accent-purple) 60%, #62209c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* Glow effects */
 .glow-gold {
-  /* text-shadow: 0 0 10px rgba(166, 124, 55, 0.1); */
+  text-shadow: 0 0 8px var(--accent-gold-glow);
 }
 
-/* Cards Grid */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
-  margin-top: 24px;
+.glow-blue {
+  text-shadow: 0 0 8px var(--accent-blue-glow);
 }
 
-/* Tables */
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-family);
+}
+
+.btn-primary {
+  background-color: rgba(207, 167, 81, 0.08);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-gold);
+  color: #06090c;
+  box-shadow: 0 0 12px var(--accent-gold-glow);
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--panel-border-hover);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Data Tables - dark flat style like warframe.market */
 .table-container {
-  overflow-x: auto;
   width: 100%;
-  margin-top: 20px;
-  border-radius: 6px;
-  border: 1px solid var(--panel-border);
+  overflow-x: auto;
+  margin-top: 10px;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  background: #ffffff;
 }
 
 .data-table th {
-  padding: 14px 16px;
-  font-weight: 600;
+  padding: 12px 16px;
+  background-color: #0a0d11;
   color: var(--text-secondary);
-  background: #eae8e0;
-  border-bottom: 2px solid var(--panel-border);
-  text-transform: uppercase;
   font-size: 11px;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 2px solid var(--panel-border);
 }
 
 .data-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid #eae8e0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--panel-border);
   color: var(--text-primary);
-  font-size: 14px;
-}
-
-.data-table tbody tr {
+  font-size: 13px;
   transition: background-color 0.15s ease;
 }
 
-.data-table tbody tr:hover {
-  background-color: #faf9f6;
+.data-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* Buttons - Warframe theme is typically dark slate with gold accents */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 9px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  border: 1px solid transparent;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-primary {
-  background: #1e2429;
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary:hover {
-  background: var(--accent-gold);
-  color: #1e2429;
-  box-shadow: 0 4px 12px rgba(166, 124, 55, 0.25);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background: #faf9f6;
-  border-color: var(--panel-border);
-  color: var(--text-secondary);
-}
-
-.btn-secondary:hover {
-  background: #eae8e0;
-  border-color: var(--text-muted);
-  color: var(--text-primary);
-}
-
-.btn-accent {
-  background: transparent;
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
-}
-
-.btn-accent:hover {
-  background: rgba(166, 124, 55, 0.05);
-}
-
-/* Badges */
+/* Badges for items */
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 3px 8px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.badge-purple {
-  background: rgba(122, 53, 156, 0.08);
-  color: var(--accent-purple);
-  border: 1px solid rgba(122, 53, 156, 0.2);
-}
-
-.badge-gold {
-  background: rgba(166, 124, 55, 0.08);
-  color: var(--accent-gold);
-  border: 1px solid rgba(166, 124, 55, 0.25);
-}
-
-.badge-blue {
-  background: rgba(44, 94, 138, 0.08);
-  color: var(--accent-blue);
-  border: 1px solid rgba(44, 94, 138, 0.2);
+  border: 1px solid transparent;
 }
 
 .badge-success {
-  background: rgba(56, 142, 60, 0.08);
-  color: var(--success);
-  border: 1px solid rgba(56, 142, 60, 0.2);
+  background-color: rgba(46, 187, 126, 0.08);
+  border-color: var(--color-success);
+  color: var(--color-success);
 }
 
-/* Form controls */
-.select-input {
-  background: #ffffff;
-  border: 1px solid var(--panel-border);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.select-input:focus {
+.badge-gold {
+  background-color: rgba(207, 167, 81, 0.08);
   border-color: var(--accent-gold);
-  box-shadow: 0 0 6px rgba(166, 124, 55, 0.15);
+  color: var(--accent-gold);
 }
 
-.number-input {
-  background: #ffffff;
-  border: 1px solid var(--panel-border);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 13px;
-  outline: none;
-  width: 90px;
-  transition: all 0.2s ease;
-}
-
-.number-input:focus {
-  border-color: var(--accent-gold);
-  box-shadow: 0 0 6px rgba(166, 124, 55, 0.15);
-}
-
-/* Loading Spinner */
-.spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(166, 124, 55, 0.1);
-  border-radius: 50%;
-  border-top-color: var(--accent-gold);
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Platines price display styling */
-.plat-price {
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.plat-price::after {
-  content: "☤";
+.badge-blue {
+  background-color: rgba(0, 210, 255, 0.08);
+  border-color: var(--accent-blue);
   color: var(--accent-blue);
-  text-shadow: 0 0 4px rgba(44, 94, 138, 0.3);
 }
 
-.plat-price-gold {
-  color: var(--accent-gold);
-}
-.plat-price-gold::after {
-  color: var(--accent-gold);
-  text-shadow: 0 0 4px rgba(166, 124, 55, 0.3);
+.badge-purple {
+  background-color: rgba(157, 78, 221, 0.08);
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
 }
 
-/* Toggles & Checkboxes */
+.badge-danger {
+  background-color: rgba(234, 84, 85, 0.08);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+/* Custom Checkbox */
 .checkbox-container {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-  cursor: pointer;
   font-size: 13px;
-  font-weight: 500;
   color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
 }
 
 .checkbox-input {
-  accent-color: var(--accent-gold);
-  width: 15px;
-  height: 15px;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--panel-border-hover);
+  border-radius: 3px;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.02);
   cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.checkbox-input:checked {
+  background-color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.checkbox-input:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #06090c;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* Platinum Price Highlight */
+.plat-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+}
+
+.plat-price-gold {
+  color: #ffe0a3;
+  text-shadow: 0 0 6px rgba(255, 224, 163, 0.25);
+}
+
+/* Responsive Grids */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 24px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
 }

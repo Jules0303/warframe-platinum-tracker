@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { RELICS, type Relic } from "../services/relicData";
 import { calculateSoloEV, calculateRadshareEV } from "../utils/calculations";
+import { PlatinumIcon, RelicIcon } from "./Icons";
 
 interface RelicTrackerProps {
   prices: Record<string, number>;
@@ -133,9 +134,7 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
               item.relic.status === "Unvaulted" ? "badge-success" :
               item.relic.status === "Resurgence" ? "badge-gold" :
               "badge-purple";
-            
             const isSelected = activeRelic.name === item.relic.name;
-
             return (
               <div
                 key={item.relic.name}
@@ -144,8 +143,13 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                 style={{
                   ...styles.top5Card,
                   borderColor: isSelected ? "var(--accent-gold)" : "var(--panel-border)",
-                  borderTop: `4px solid ${isSelected ? 'var(--accent-gold)' : '#d5d1c4'}`,
-                  background: isSelected ? "rgba(166, 124, 55, 0.05)" : "#ffffff"
+                  borderTop: `4px solid ${
+                    item.relic.era === "Lith" ? "#4ca3dd" :
+                    item.relic.era === "Meso" ? "#e09f3e" :
+                    item.relic.era === "Neo" ? "#9d4edd" :
+                    "#d4b26f"
+                  }`,
+                  background: isSelected ? "rgba(207, 167, 81, 0.05)" : "var(--panel-bg)"
                 }}
               >
                 <div style={styles.top5Header}>
@@ -154,14 +158,23 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                     {item.relic.status === "Unvaulted" ? "Farmable" : item.relic.status === "Resurgence" ? "Aya" : "Vaulted"}
                   </span>
                 </div>
-                <h4 style={styles.top5Title}>{item.relic.era} {item.relic.name}</h4>
+                <h4 style={{ ...styles.top5Title, color: 
+                  item.relic.era === "Lith" ? "#4ca3dd" :
+                  item.relic.era === "Meso" ? "#e09f3e" :
+                  item.relic.era === "Neo" ? "#9d4edd" :
+                  "#d4b26f"
+                }}>
+                  <RelicIcon size={14} style={{ marginRight: "4px" }} />
+                  {item.relic.era} {item.relic.name}
+                </h4>
                 <div style={styles.top5ProfitRow}>
-                  <span style={styles.top5ProfitLabel}>EV Radshare :</span>
-                  <span className="plat-price plat-price-gold" style={{ fontSize: "16px", fontWeight: 700 }}>
-                    {item.evRadshare.toFixed(1)} PL
+                  <span style={styles.top5ProfitLabel}>EV :</span>
+                  <span className="plat-price plat-price-gold" style={{ fontSize: "14px", fontWeight: 700 }}>
+                    <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                    {item.evRadshare.toFixed(0)}
                   </span>
                 </div>
-                <span style={styles.top5HourProfit}>~ {Math.round(item.evRadshare * (60 / runTimeMin))} PL/h</span>
+                <span style={styles.top5HourProfit}>~ {Math.round(item.evRadshare * (60 / runTimeMin))} /h</span>
               </div>
             );
           })}
@@ -197,10 +210,16 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                       onClick={() => selectRelic(item.relic)}
                       style={{
                         cursor: "pointer",
-                        backgroundColor: isSelected ? "rgba(166, 124, 55, 0.04)" : "transparent"
+                        backgroundColor: isSelected ? "rgba(207, 167, 81, 0.04)" : "transparent"
                       }}
                     >
-                      <td style={{ fontWeight: 700, color: isSelected ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                      <td style={{ fontWeight: 700, color: 
+                        item.relic.era === "Lith" ? "#4ca3dd" :
+                        item.relic.era === "Meso" ? "#e09f3e" :
+                        item.relic.era === "Neo" ? "#9d4edd" :
+                        "#d4b26f"
+                      }}>
+                        <RelicIcon size={14} style={{ marginRight: "6px" }} />
                         {item.relic.era} {item.relic.name}
                       </td>
                       <td>
@@ -208,11 +227,18 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                           {item.relic.status === "Unvaulted" ? "Farmable" : item.relic.status === "Resurgence" ? "Aya" : "Vaulted"}
                         </span>
                       </td>
-                      <td className="plat-price">{item.evSoloIntact.toFixed(1)} PL</td>
-                      <td className="plat-price">{item.evSoloRadiant.toFixed(1)} PL</td>
+                      <td className="plat-price">
+                        <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
+                        {item.evSoloIntact.toFixed(1)}
+                      </td>
+                      <td className="plat-price">
+                        <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
+                        {item.evSoloRadiant.toFixed(1)}
+                      </td>
                       <td>
                         <span className="plat-price plat-price-gold" style={{ fontWeight: 700 }}>
-                          {item.evRadshare.toFixed(1)} PL
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {item.evRadshare.toFixed(1)}
                         </span>
                       </td>
                     </tr>
@@ -228,7 +254,8 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
           <div style={styles.summaryTitleRow}>
             <div>
               <h2 className="title-grad-gold" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "18px" }}>
-                Relique {activeRelic.era} {activeRelic.name}
+                <RelicIcon size={18} />
+                {activeRelic.era} {activeRelic.name}
               </h2>
               <div style={{ marginTop: "4px" }}>
                 <span
@@ -239,7 +266,7 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                   }`}
                 >
                   {activeRelic.status === "Unvaulted" ? "Active" : 
-                   activeRelic.status === "Resurgence" ? "Prime Resurgence" : 
+                   activeRelic.status === "Resurgence" ? "Resurgence" : 
                    "Vaultée"}
                 </span>
               </div>
@@ -258,16 +285,18 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
             <div style={styles.detailEVBox}>
               <span style={styles.detailEVLabel}>Radshare (4x)</span>
               <span className="plat-price plat-price-gold" style={styles.detailEVValue}>
-                {activeRelicObj.evRadshare.toFixed(1)} PL
+                <PlatinumIcon size={16} style={{ marginRight: "4px" }} />
+                {activeRelicObj.evRadshare.toFixed(1)}
               </span>
-              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evRadshare * (60 / runTimeMin))} PL/h</span>
+              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evRadshare * (60 / runTimeMin))} /h</span>
             </div>
             <div style={styles.detailEVBox}>
               <span style={styles.detailEVLabel}>Solo Éclatant</span>
-              <span className="plat-price" style={styles.detailEVValue}>
-                {activeRelicObj.evSoloRadiant.toFixed(1)} PL
+              <span className="plat-price" style={{ ...styles.detailEVValue, color: "var(--text-primary)" }}>
+                <PlatinumIcon size={14} style={{ marginRight: "4px" }} />
+                {activeRelicObj.evSoloRadiant.toFixed(1)}
               </span>
-              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evSoloRadiant * (60 / runTimeMin))} PL/h</span>
+              <span style={styles.detailEVSub}>~ {Math.round(activeRelicObj.evSoloRadiant * (60 / runTimeMin))} /h</span>
             </div>
           </div>
 
@@ -302,7 +331,8 @@ export const RelicTracker: React.FC<RelicTrackerProps> = ({ prices, refreshPrice
                           <span style={{ color: "var(--text-muted)", fontStyle: "italic" }}>0 PL</span>
                         ) : (
                           <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
-                            {price} PL
+                            <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                            {price}
                           </span>
                         )}
                       </td>
@@ -352,7 +382,7 @@ const styles: Record<string, React.CSSProperties> = {
   searchContainer: {
     display: "flex",
     alignItems: "center",
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     borderRadius: "4px",
     padding: "6px 12px",
@@ -445,7 +475,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   detailEVBox: {
     flex: 1,
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     padding: "12px",
     borderRadius: "6px",

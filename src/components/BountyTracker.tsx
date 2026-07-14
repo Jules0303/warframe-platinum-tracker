@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SYNDICATES, type Syndicate } from "../services/relicData";
 import { calculateSyndicateConversion } from "../utils/calculations";
+import { PlatinumIcon } from "./Icons";
 
 interface BountyTrackerProps {
   prices: Record<string, number>;
@@ -136,11 +137,13 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
                       </td>
                       <td>
                         <span className="plat-price plat-price-gold" style={{ fontWeight: 700 }}>
-                          {item.ratio1k.toFixed(1)} PL
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {item.ratio1k.toFixed(1)}
                         </span>
                       </td>
                       <td className="plat-price">
-                        {Math.round(item.evMaxStanding)} PL
+                        <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
+                        {Math.round(item.evMaxStanding)}
                       </td>
                     </tr>
                   );
@@ -180,7 +183,8 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
               {activeSyndicateObj.bestItemName.split(" (")[0]}
             </span>
             <span className="plat-price plat-price-gold" style={{ fontSize: "20px", fontWeight: 800, marginTop: "8px" }}>
-              {activeSyndicateObj.ratio1k.toFixed(1)} PL <span style={{ fontSize: "11px", fontWeight: "normal", color: "var(--text-muted)" }}>/ 10k points</span>
+              <PlatinumIcon size={16} style={{ marginRight: "4px" }} />
+              {activeSyndicateObj.ratio1k.toFixed(1)} <span style={{ fontSize: "11px", fontWeight: "normal", color: "var(--text-muted)" }}>/ 10k pts</span>
             </span>
           </div>
 
@@ -202,19 +206,21 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
                   const isBest = item.name === activeSyndicateObj.bestItemName;
 
                   return (
-                    <tr key={item.urlName} style={{ backgroundColor: isBest ? "rgba(166,124,55,0.03)" : "transparent" }}>
+                    <tr key={item.urlName} style={{ backgroundColor: isBest ? "rgba(207,167,81,0.03)" : "transparent" }}>
                       <td style={{ fontWeight: 600, color: isBest ? "var(--accent-gold)" : "var(--text-primary)" }}>
                         {item.name.split(" (")[0]} {isBest && "⭐"}
                       </td>
                       <td style={{ color: "var(--text-secondary)" }}>{item.cost}</td>
                       <td>
                         <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
-                          {price} PL
+                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                          {price}
                         </span>
                       </td>
                       <td>
                         <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
-                          {ratio10k.toFixed(1)} PL
+                          <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
+                          {ratio10k.toFixed(1)}
                         </span>
                       </td>
                     </tr>
@@ -253,7 +259,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     gap: "8px",
     marginBottom: "24px",
-    backgroundColor: "#ffffff",
+    backgroundColor: "var(--panel-bg)",
     padding: "10px 16px",
     borderRadius: "6px",
     border: "1px solid var(--panel-border)",
@@ -267,6 +273,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.2s ease",
+    background: "var(--panel-bg)",
+    color: "var(--text-secondary)"
   },
   mainLayout: {
     display: "grid",
@@ -285,7 +293,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "20px",
   },
   statBox: {
-    backgroundColor: "#faf9f6",
+    backgroundColor: "#070a0d",
     border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "6px",
