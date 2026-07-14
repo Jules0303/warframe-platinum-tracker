@@ -293,7 +293,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "20px",
   },
   statBox: {
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "6px",

@@ -96,7 +96,7 @@ export const EidolonTracker: React.FC<EidolonTrackerProps> = ({ prices, refreshP
                   style={{
                     ...styles.controlBtn,
                     borderColor: capturesPerCycle === num ? "var(--accent-purple)" : "var(--panel-border)",
-                    background: capturesPerCycle === num ? "rgba(171, 71, 188, 0.15)" : "rgba(0,0,0,0.2)",
+                    background: capturesPerCycle === num ? "rgba(138, 43, 226, 0.1)" : "var(--bg-color)",
                     color: capturesPerCycle === num ? "var(--accent-purple)" : "var(--text-secondary)"
                   }}
                 >
@@ -216,8 +216,8 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "24px",
   },
   statBox: {
-    backgroundColor: "rgba(0,0,0,0.15)",
-    border: "1px solid rgba(255,255,255,0.03)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     borderRadius: "12px",
     padding: "20px",
     display: "flex",
@@ -226,8 +226,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "8px",
   },
   statBoxHighlight: {
-    backgroundColor: "#170b21",
-    border: "1px solid rgba(171, 71, 188, 0.2)",
+    backgroundColor: "rgba(138, 43, 226, 0.05)",
+    border: "1px solid rgba(138, 43, 226, 0.2)",
     borderRadius: "12px",
     padding: "20px",
     display: "flex",
@@ -264,7 +264,8 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)",
   },
   controlBox: {
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "12px",
     marginBottom: "24px",
@@ -297,8 +298,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontStyle: "italic",
   },
   infoBox: {
-    backgroundColor: "rgba(255,255,255,0.02)",
-    border: "1px solid rgba(255,255,255,0.05)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     borderRadius: "8px",
     padding: "16px",
     fontSize: "13px",

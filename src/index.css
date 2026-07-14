@@ -1,25 +1,25 @@
 :root {
-  /* Warframe / Warframe Market Theme Palette */
-  --bg-color: #06090c;
-  --panel-bg: #0d1217;
-  --panel-border: #1a232c;
-  --panel-border-hover: #293745;
+  /* Official Warframe Website Light Theme Palette */
+  --bg-color: #f4f6f9;
+  --panel-bg: #ffffff;
+  --panel-border: #e1e5eb;
+  --panel-border-hover: #cbd2db;
   
-  --text-primary: #f0f2f5;
-  --text-secondary: #8c9ca7;
-  --text-muted: #576570;
+  --text-primary: #0b1c2c;
+  --text-secondary: #4a5b6c;
+  --text-muted: #7a8c9f;
   
-  --accent-gold: #cfa751;
-  --accent-gold-glow: rgba(207, 167, 81, 0.35);
+  --accent-blue: #00a2ff;
+  --accent-blue-glow: rgba(0, 162, 255, 0.15);
   
-  --accent-blue: #00d2ff;
-  --accent-blue-glow: rgba(0, 210, 255, 0.25);
+  --accent-gold: #b88a1b;
+  --accent-gold-glow: rgba(184, 138, 27, 0.15);
   
-  --accent-purple: #9d4edd;
+  --accent-purple: #8a2be2;
   
   /* Status Colors */
-  --color-success: #2ebb7e;
-  --color-warning: #e09f3e;
+  --color-success: #107c41;
+  --color-warning: #b77c15;
   --color-danger: #ea5455;
   
   --font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -40,9 +40,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(13, 19, 26, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(207, 167, 81, 0.03) 0%, transparent 40%);
 }
 
 #root {
@@ -58,18 +55,18 @@ body {
   padding: 0 20px;
 }
 
-/* Glassmorphism panels */
+/* Glassmorphism panels - light clean version */
 .glass-panel {
   background-color: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 12px rgba(11, 28, 44, 0.04);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .glass-panel-hover:hover {
   border-color: var(--panel-border-hover);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 20px rgba(11, 28, 44, 0.08);
   transform: translateY(-2px);
 }
 
@@ -83,33 +80,23 @@ h1, h2, h3, h4, h5, h6 {
 /* Gradients for headings */
 .title-grad-gold {
   color: var(--accent-gold);
-  background: linear-gradient(135deg, #ffe0a3 0%, var(--accent-gold) 60%, #997833 100%);
+  background: linear-gradient(135deg, #d8ac44 0%, var(--accent-gold) 60%, #85610d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 10px rgba(207, 167, 81, 0.15);
 }
 
 .title-grad-blue {
   color: var(--accent-blue);
-  background: linear-gradient(135deg, #a3f1ff 0%, var(--accent-blue) 60%, #0088a3 100%);
+  background: linear-gradient(135deg, #00c3ff 0%, var(--accent-blue) 60%, #0077c2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .title-grad-purple {
   color: var(--accent-purple);
-  background: linear-gradient(135deg, #e3c4ff 0%, var(--accent-purple) 60%, #62209c 100%);
+  background: linear-gradient(135deg, #b066ff 0%, var(--accent-purple) 60%, #5d16a8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* Glow effects */
-.glow-gold {
-  text-shadow: 0 0 8px var(--accent-gold-glow);
-}
-
-.glow-blue {
-  text-shadow: 0 0 8px var(--accent-blue-glow);
 }
 
 /* Buttons */
@@ -129,35 +116,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background-color: rgba(207, 167, 81, 0.08);
-  border: 1px solid var(--accent-gold);
-  color: var(--accent-gold);
+  background-color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+  color: #ffffff;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--accent-gold);
-  color: #06090c;
-  box-shadow: 0 0 12px var(--accent-gold-glow);
+  background-color: #008be0;
+  border-color: #008be0;
+  box-shadow: 0 0 8px var(--accent-blue-glow);
 }
 
 .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--panel-border-hover);
+  background-color: #ffffff;
+  border: 1px solid var(--panel-border);
   color: var(--text-secondary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  border-color: var(--text-primary);
-  color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background-color: #f7fafc;
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Data Tables - dark flat style like warframe.market */
+/* Data Tables - Clean light flat style */
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -172,7 +159,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .data-table th {
   padding: 12px 16px;
-  background-color: #0a0d11;
+  background-color: #f1f4f8;
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 700;
@@ -190,10 +177,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .data-table tr:hover td {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(0, 162, 255, 0.02);
 }
 
-/* Badges for items */
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -207,25 +194,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .badge-success {
-  background-color: rgba(46, 187, 126, 0.08);
+  background-color: rgba(16, 124, 65, 0.08);
   border-color: var(--color-success);
   color: var(--color-success);
 }
 
 .badge-gold {
-  background-color: rgba(207, 167, 81, 0.08);
+  background-color: rgba(184, 138, 27, 0.08);
   border-color: var(--accent-gold);
   color: var(--accent-gold);
 }
 
 .badge-blue {
-  background-color: rgba(0, 210, 255, 0.08);
+  background-color: rgba(0, 162, 255, 0.08);
   border-color: var(--accent-blue);
   color: var(--accent-blue);
 }
 
 .badge-purple {
-  background-color: rgba(157, 78, 221, 0.08);
+  background-color: rgba(138, 43, 226, 0.08);
   border-color: var(--accent-purple);
   color: var(--accent-purple);
 }
@@ -254,15 +241,15 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--panel-border-hover);
   border-radius: 3px;
   outline: none;
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: #ffffff;
   cursor: pointer;
   position: relative;
   transition: all 0.15s ease;
 }
 
 .checkbox-input:checked {
-  background-color: var(--accent-gold);
-  border-color: var(--accent-gold);
+  background-color: var(--accent-blue);
+  border-color: var(--accent-blue);
 }
 
 .checkbox-input:checked::after {
@@ -271,7 +258,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #06090c;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 900;
 }
@@ -283,8 +270,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .plat-price-gold {
-  color: #ffe0a3;
-  text-shadow: 0 0 6px rgba(255, 224, 163, 0.25);
+  color: var(--accent-gold);
 }
 
 /* Responsive Grids */

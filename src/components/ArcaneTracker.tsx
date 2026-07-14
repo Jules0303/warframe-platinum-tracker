@@ -356,7 +356,7 @@ const styles: Record<string, React.CSSProperties> = {
   searchContainer: {
     display: "flex",
     alignItems: "center",
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     borderRadius: "4px",
     padding: "6px 12px",
@@ -408,7 +408,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "20px",
   },
   detailEVBox: {
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "6px",
@@ -465,7 +465,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "0 2px",
   },
   calcResultBox: {
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     borderRadius: "6px",
     padding: "16px",

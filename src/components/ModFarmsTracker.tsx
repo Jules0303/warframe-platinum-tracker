@@ -289,7 +289,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "24px",
   },
   statBox: {
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     borderRadius: "8px",
     padding: "20px",
@@ -299,8 +299,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "8px",
   },
   statBoxHighlight: {
-    backgroundColor: "#0c1521",
-    border: "1px solid rgba(0, 210, 255, 0.2)",
+    backgroundColor: "rgba(0, 162, 255, 0.05)",
+    border: "1px solid rgba(0, 162, 255, 0.2)",
     borderRadius: "8px",
     padding: "20px",
     display: "flex",
@@ -338,7 +338,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)",
   },
   controlBox: {
-    backgroundColor: "#faf9f6",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "8px",

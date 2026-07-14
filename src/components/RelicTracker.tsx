@@ -382,7 +382,7 @@ const styles: Record<string, React.CSSProperties> = {
   searchContainer: {
     display: "flex",
     alignItems: "center",
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     borderRadius: "4px",
     padding: "6px 12px",
@@ -475,7 +475,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   detailEVBox: {
     flex: 1,
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "12px",
     borderRadius: "6px",

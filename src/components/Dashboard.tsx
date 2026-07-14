@@ -289,7 +289,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px",
   },
   rankBadge: {
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "3px 8px",
     borderRadius: "4px",
@@ -312,7 +312,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   metricsContainer: {
     display: "flex",
-    backgroundColor: "#070a0d",
+    backgroundColor: "var(--bg-color)",
     border: "1px solid var(--panel-border)",
     padding: "12px 16px",
     borderRadius: "6px",

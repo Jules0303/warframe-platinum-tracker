@@ -221,8 +221,8 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "24px",
   },
   statBox: {
-    backgroundColor: "rgba(0,0,0,0.15)",
-    border: "1px solid rgba(255,255,255,0.03)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     borderRadius: "12px",
     padding: "20px",
     display: "flex",
@@ -231,9 +231,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "8px",
   },
   statBoxHighlight: {
-    backgroundColor: "rgba(41, 182, 246, 0.05)",
-    border: "1px solid rgba(41, 182, 246, 0.2)",
-    boxShadow: "0 0 15px rgba(41, 182, 246, 0.05)",
+    backgroundColor: "rgba(0, 162, 255, 0.05)",
+    border: "1px solid rgba(0, 162, 255, 0.2)",
     borderRadius: "12px",
     padding: "20px",
     display: "flex",
@@ -270,7 +269,8 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)",
   },
   controlBox: {
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     padding: "16px",
     borderRadius: "12px",
     marginBottom: "24px",
@@ -301,8 +301,8 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: "right",
   },
   infoBox: {
-    backgroundColor: "rgba(255,255,255,0.02)",
-    border: "1px solid rgba(255,255,255,0.05)",
+    backgroundColor: "var(--bg-color)",
+    border: "1px solid var(--panel-border)",
     borderRadius: "8px",
     padding: "16px",
     fontSize: "13px",
