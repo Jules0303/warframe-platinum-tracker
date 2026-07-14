@@ -36,59 +36,38 @@ export function getItemUrlName(name: string): string {
   return urlName;
 }
 
-// Heuristique automatique : Les reliques actives sont celles contenant des pièces
-// de Warframes ou d'armes Prime qui ne sont pas archivées (Vaultées).
-// Il suffit de maintenir cette liste simplifiée des Warframes actives pour classer automatiquement les centaines de reliques.
-const UNVAULTED_SETS = [
-  "sevagoth",
-  "gauss",
-  "protea",
-  "wisp",
-  "hildryn",
-  "khora",
-  "baruuk",
-  "revenant",
-  "epitaph",
-  "acceltra",
-  "akarius",
-  "fulmin",
-  "larkspur",
-  "velox",
-  "shade",
-  "cobra",
-  "okina",
-  "hystrix",
-  "dual_keres",
-  "afentis"
-];
-
-const RESURGENCE_SETS = [
-  "volt",
-  "saryn",
-  "nekros",
-  "dakra",
-  "carrier"
-];
-
 export async function fetchAllRelics(staticRelics: Relic[]): Promise<Relic[]> {
   try {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/relics.json"
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch relics: ${response.statusText}`);
-    }
-    const data: ApiResponse = await response.json();
-    
-    if (!data || !Array.isArray(data.relics)) {
-      throw new Error("Invalid response format");
+    // Récupérer la base de reliques et les tables de drop actives en parallèle
+    const [relicsRes, missionsRes, cetusRes, solarisRes, deimosRes] = await Promise.all([
+      fetch("https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/relics.json"),
+      fetch("https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/missionRewards.json").catch(() => null),
+      fetch("https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/cetusBountyRewards.json").catch(() => null),
+      fetch("https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/solarisBountyRewards.json").catch(() => null),
+      fetch("https://raw.githubusercontent.com/WFCD/warframe-drop-data/master/data/deimosBountyRewards.json").catch(() => null),
+    ]);
+
+    if (!relicsRes.ok) {
+      throw new Error(`Failed to fetch relics database: ${relicsRes.statusText}`);
     }
 
-    // Filter only "Intact" state to avoid duplicates and gather rewards
+    const data: ApiResponse = await relicsRes.json();
+    
+    // Lire les tables de drop sous forme de texte brut pour faire une recherche rapide par sous-chaîne
+    const missionsText = missionsRes && missionsRes.ok ? await missionsRes.text() : "";
+    const cetusText = cetusRes && cetusRes.ok ? await cetusRes.text() : "";
+    const solarisText = solarisRes && solarisRes.ok ? await solarisRes.text() : "";
+    const deimosText = deimosRes && deimosRes.ok ? await deimosRes.text() : "";
+
+    if (!data || !Array.isArray(data.relics)) {
+      throw new Error("Invalid relics database format");
+    }
+
+    // Garder uniquement l'état "Intact" pour rassembler la liste unique des reliques
     const intactRelics = data.relics.filter((r) => r.state === "Intact");
 
     const parsedRelics: Relic[] = intactRelics.map((r) => {
-      const era = r.tier as any; // Lith, Meso, Neo, Axi, Requiem
+      const era = r.tier as any; // Lith, Meso, Neo, Axi
       const name = r.relicName;
       
       const drops: RelicDrop[] = r.rewards.map((rew) => {
@@ -100,20 +79,20 @@ export async function fetchAllRelics(staticRelics: Relic[]): Promise<Relic[]> {
         };
       });
 
-      // Détection automatique du statut basée sur le contenu de la relique
-      let status: "Unvaulted" | "Resurgence" | "Vaulted" = "Vaulted";
-      
-      const hasUnvaultedDrop = drops.some((d) => 
-        UNVAULTED_SETS.some((set) => d.urlName.includes(set))
-      );
-      const hasResurgenceDrop = drops.some((d) => 
-        RESURGENCE_SETS.some((set) => d.urlName.includes(set))
-      );
+      // Nom de recherche exact de la relique dans les tables de drop (ex: "Lith C12 Relic")
+      const searchName = `"${era} ${name} Relic"`;
 
-      if (hasUnvaultedDrop) {
-        status = "Unvaulted";
-      } else if (hasResurgenceDrop) {
-        status = "Resurgence";
+      let status: "Unvaulted" | "Resurgence" | "Vaulted" = "Vaulted";
+
+      const inMissions = missionsText.includes(searchName);
+      const inBounties = cetusText.includes(searchName) || 
+                         solarisText.includes(searchName) || 
+                         deimosText.includes(searchName);
+
+      if (inMissions) {
+        status = "Unvaulted"; // Drop actif dans les missions régulières
+      } else if (inBounties) {
+        status = "Resurgence"; // Drop actif uniquement dans les mises à prix (Prime Resurgence)
       }
 
       return {
@@ -124,32 +103,29 @@ export async function fetchAllRelics(staticRelics: Relic[]): Promise<Relic[]> {
       };
     });
 
-    // Remove duplicates just in case, and filter out Requiem relics if they don't fit
+    // Conserver uniquement les ères classiques du jeu
     const validEras = ["Lith", "Meso", "Neo", "Axi"];
     const filteredRelics = parsedRelics.filter((r) => validEras.includes(r.era));
 
-    // Sort: Unvaulted/Resurgence first, then by Era (Lith -> Meso -> Neo -> Axi), then by Name
+    // Tri : Unvaulted en premier, puis Resurgence, puis Vaulted, trié par Ère et par Nom
     const eraOrder = { Lith: 1, Meso: 2, Neo: 3, Axi: 4 };
     filteredRelics.sort((a, b) => {
-      // Status priority
       const statusScore = { Unvaulted: 3, Resurgence: 2, Vaulted: 1 };
       const scoreA = statusScore[a.status] || 1;
       const scoreB = statusScore[b.status] || 1;
       if (scoreA !== scoreB) return scoreB - scoreA;
 
-      // Era priority
       const eraA = eraOrder[a.era as keyof typeof eraOrder] || 99;
       const eraB = eraOrder[b.era as keyof typeof eraOrder] || 99;
       if (eraA !== eraB) return eraA - eraB;
 
-      // Name priority
       return a.name.localeCompare(b.name);
     });
 
     return filteredRelics;
   } catch (error) {
-    console.error("Error fetching all relics from API:", error);
-    // Fallback to static relics if API fails
+    console.error("Error fetching relics and drop tables:", error);
+    // Fallback aux reliques statiques en cas d'échec réseau
     return staticRelics;
   }
 }
