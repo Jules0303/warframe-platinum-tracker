@@ -200,32 +200,34 @@ export const BountyTracker: React.FC<BountyTrackerProps> = ({ prices, refreshPri
                 </tr>
               </thead>
               <tbody>
-                {activeSyndicate.exchangeItems.map((item) => {
-                  const price = prices[item.urlName] ?? 0;
-                  const ratio10k = (price / item.cost) * 10000;
-                  const isBest = item.name === activeSyndicateObj.bestItemName;
+                {[...activeSyndicate.exchangeItems]
+                  .sort((a, b) => (prices[a.urlName] ?? 0) - (prices[b.urlName] ?? 0))
+                  .map((item) => {
+                    const price = prices[item.urlName] ?? 0;
+                    const ratio10k = (price / item.cost) * 10000;
+                    const isBest = item.name === activeSyndicateObj.bestItemName;
 
-                  return (
-                    <tr key={item.urlName} style={{ backgroundColor: isBest ? "rgba(207,167,81,0.03)" : "transparent" }}>
-                      <td style={{ fontWeight: 600, color: isBest ? "var(--accent-gold)" : "var(--text-primary)" }}>
-                        {item.name.split(" (")[0]} {isBest && "⭐"}
-                      </td>
-                      <td style={{ color: "var(--text-secondary)" }}>{item.cost}</td>
-                      <td>
-                        <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
-                          <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
-                          {price}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
-                          <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
-                          {ratio10k.toFixed(1)}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
+                    return (
+                      <tr key={item.urlName} style={{ backgroundColor: isBest ? "rgba(207,167,81,0.03)" : "transparent" }}>
+                        <td style={{ fontWeight: 600, color: isBest ? "var(--accent-gold)" : "var(--text-primary)" }}>
+                          {item.name.split(" (")[0]} {isBest && "⭐"}
+                        </td>
+                        <td style={{ color: "var(--text-secondary)" }}>{item.cost}</td>
+                        <td>
+                          <span className="plat-price plat-price-gold" style={{ fontWeight: 600 }}>
+                            <PlatinumIcon size={12} style={{ marginRight: "3px" }} />
+                            {price}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="plat-price" style={{ color: "var(--text-secondary)" }}>
+                            <PlatinumIcon size={11} style={{ marginRight: "3px" }} />
+                            {ratio10k.toFixed(1)}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

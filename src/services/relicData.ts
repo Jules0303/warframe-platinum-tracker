@@ -421,7 +421,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Mesa Waltz (Mod d'Augmentation)", urlName: "mesa_waltz", cost: 25000 },
-      { name: "Vaykor Marelok (Arme de Syndicat)", urlName: "vaykor_marelok", cost: 100000 }
+      { name: "Justice Blades (Mod d'Augmentation)", urlName: "justice_blades", cost: 25000 },
+      { name: "Scatter Justice (Mod d'Augmentation)", urlName: "scatter_justice", cost: 25000 },
+      { name: "Acid Shells (Mod d'Augmentation)", urlName: "acid_shells", cost: 25000 },
+      { name: "Vaykor Marelok (Arme de Syndicat)", urlName: "vaykor_marelok", cost: 100000 },
+      { name: "Vaykor Hek (Arme de Syndicat)", urlName: "vaykor_hek", cost: 100000 },
+      { name: "Vaykor Sydon (Arme de Syndicat)", urlName: "vaykor_sydon", cost: 125000 },
+      { name: "Fluctus Limb (Archwing)", urlName: "fluctus_limb", cost: 20000 },
+      { name: "Fluctus Stock (Archwing)", urlName: "fluctus_stock", cost: 20000 },
+      { name: "Centaur Blade (Archwing)", urlName: "centaur_blade", cost: 20000 },
+      { name: "Rathbone Head (Archwing)", urlName: "rathbone_head", cost: 20000 }
     ]
   },
   {
@@ -431,7 +440,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Seeking Shuriken (Mod d'Augmentation)", urlName: "seeking_shuriken", cost: 25000 },
-      { name: "Telos Boltace (Arme de Syndicat)", urlName: "telos_boltace", cost: 100000 }
+      { name: "Accumulating Whipclaw (Mod d'Augmentation)", urlName: "accumulating_whipclaw", cost: 25000 },
+      { name: "Phoenix Renewal (Mod d'Augmentation)", urlName: "phoenix_renewal", cost: 25000 },
+      { name: "Chilling Globe (Mod d'Augmentation)", urlName: "chilling_globe", cost: 25000 },
+      { name: "Telos Boltace (Arme de Syndicat)", urlName: "telos_boltace", cost: 100000 },
+      { name: "Telos Akbolto (Arme de Syndicat)", urlName: "telos_akbolto", cost: 100000 },
+      { name: "Telos Boltor (Arme de Syndicat)", urlName: "telos_boltor", cost: 125000 },
+      { name: "Cyngas Receiver (Archwing)", urlName: "cyngas_receiver", cost: 20000 },
+      { name: "Cyngas Stock (Archwing)", urlName: "cyngas_stock", cost: 20000 },
+      { name: "Centaur Aegis (Archwing)", urlName: "centaur_aegis", cost: 20000 },
+      { name: "Onorix Handle (Archwing)", urlName: "onorix_handle", cost: 20000 }
     ]
   },
   {
@@ -441,7 +459,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Resonance (Mod d'Augmentation)", urlName: "resonance", cost: 25000 },
-      { name: "Synoid Gammacor (Arme de Syndicat)", urlName: "synoid_gammacor", cost: 100000 }
+      { name: "Chilling Globe (Mod d'Augmentation)", urlName: "chilling_globe", cost: 25000 },
+      { name: "Pilfering Strangledome (Mod d'Augmentation)", urlName: "pilfering_strangledome", cost: 25000 },
+      { name: "Counter Pulse (Mod d'Augmentation)", urlName: "counter_pulse", cost: 25000 },
+      { name: "Synoid Gammacor (Arme de Syndicat)", urlName: "synoid_gammacor", cost: 100000 },
+      { name: "Synoid Heliocor (Arme de Syndicat)", urlName: "synoid_heliocor", cost: 100000 },
+      { name: "Synoid Simulor (Arme de Syndicat)", urlName: "synoid_simulor", cost: 125000 },
+      { name: "Fluctus Barrel (Archwing)", urlName: "fluctus_barrel", cost: 20000 },
+      { name: "Cyngas Stock (Archwing)", urlName: "cyngas_stock", cost: 20000 },
+      { name: "Velocitus Barrel (Archwing)", urlName: "velocitus_barrel", cost: 20000 },
+      { name: "Veritux Blade (Archwing)", urlName: "veritux_blade", cost: 20000 }
     ]
   },
   {
@@ -451,7 +478,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Eternal War (Mod d'Augmentation)", urlName: "eternal_war", cost: 25000 },
-      { name: "Secura Penta (Arme de Syndicat)", urlName: "secura_penta", cost: 100000 }
+      { name: "Chaos Sphere (Mod d'Augmentation)", urlName: "chaos_sphere", cost: 25000 },
+      { name: "Despoil (Mod d'Augmentation)", urlName: "despoil", cost: 25000 },
+      { name: "Abating Link (Mod d'Augmentation)", urlName: "abating_link", cost: 25000 },
+      { name: "Secura Penta (Arme de Syndicat)", urlName: "secura_penta", cost: 100000 },
+      { name: "Secura Dual Cestra (Arme de Syndicat)", urlName: "secura_dual_cestra", cost: 100000 },
+      { name: "Secura Lecta (Arme de Syndicat)", urlName: "secura_lecta", cost: 125000 },
+      { name: "Fluctus Limb (Archwing)", urlName: "fluctus_limb", cost: 20000 },
+      { name: "Fluctus Stock (Archwing)", urlName: "fluctus_stock", cost: 20000 },
+      { name: "Centaur Blade (Archwing)", urlName: "centaur_blade", cost: 20000 },
+      { name: "Kaszas Blade (Archwing)", urlName: "kaszas_blade", cost: 20000 }
     ]
   },
   {
@@ -461,7 +497,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Despoil (Mod d'Augmentation)", urlName: "despoil", cost: 25000 },
-      { name: "Rakta Cernos (Arme de Syndicat)", urlName: "rakta_cernos", cost: 100000 }
+      { name: "Mesa Waltz (Mod d'Augmentation)", urlName: "mesa_waltz", cost: 25000 },
+      { name: "Seeking Shuriken (Mod d'Augmentation)", urlName: "seeking_shuriken", cost: 25000 },
+      { name: "Therapeutic Sentry (Mod d'Augmentation)", urlName: "therapeutic_sentry", cost: 25000 },
+      { name: "Rakta Cernos (Arme de Syndicat)", urlName: "rakta_cernos", cost: 100000 },
+      { name: "Rakta Ballistica (Arme de Syndicat)", urlName: "rakta_ballistica", cost: 100000 },
+      { name: "Rakta Dark Dagger (Arme de Syndicat)", urlName: "rakta_dark_dagger", cost: 125000 },
+      { name: "Cyngas Receiver (Archwing)", urlName: "cyngas_receiver", cost: 20000 },
+      { name: "Phaedra Stock (Archwing)", urlName: "phaedra_stock", cost: 20000 },
+      { name: "Onorix Blade (Archwing)", urlName: "onorix_blade", cost: 20000 },
+      { name: "Kaszas Handle (Archwing)", urlName: "kaszas_handle", cost: 20000 }
     ]
   },
   {
@@ -471,7 +516,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Pilfering Swarm (Mod d'Augmentation)", urlName: "pilfering_swarm", cost: 25000 },
-      { name: "Sancti Tigris (Arme de Syndicat)", urlName: "sancti_tigris", cost: 100000 }
+      { name: "Vampiric Leech (Mod d'Augmentation)", urlName: "vampiric_leech", cost: 25000 },
+      { name: "Abating Link (Mod d'Augmentation)", urlName: "abating_link", cost: 25000 },
+      { name: "Phoenix Renewal (Mod d'Augmentation)", urlName: "phoenix_renewal", cost: 25000 },
+      { name: "Sancti Tigris (Arme de Syndicat)", urlName: "sancti_tigris", cost: 100000 },
+      { name: "Sancti Castanas (Arme de Syndicat)", urlName: "sancti_castanas", cost: 100000 },
+      { name: "Sancti Magistar (Arme de Syndicat)", urlName: "sancti_magistar", cost: 125000 },
+      { name: "Phaedra Barrel (Archwing)", urlName: "phaedra_barrel", cost: 20000 },
+      { name: "Decurion Receiver (Archwing)", urlName: "dual_decurion_receiver", cost: 20000 },
+      { name: "Agkuza Blade (Archwing)", urlName: "agkuza_blade", cost: 20000 },
+      { name: "Rathbone Handle (Archwing)", urlName: "rathbone_handle", cost: 20000 }
     ]
   },
   // Syndicats de Mondes Ouverts
@@ -482,7 +536,16 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Magus Elevate (Arcane)", urlName: "magus_elevate", cost: 10000 },
-      { name: "Magus Husk (Arcane)", urlName: "magus_husk", cost: 10000 }
+      { name: "Magus Husk (Arcane)", urlName: "magus_husk", cost: 10000 },
+      { name: "Virtuos Tempo (Arcane d'Ampli)", urlName: "virtuos_tempo", cost: 10000 },
+      { name: "Virtuos Fury (Arcane d'Ampli)", urlName: "virtuos_fury", cost: 10000 },
+      { name: "Virtuos Strike (Arcane d'Ampli)", urlName: "virtuos_strike", cost: 10000 },
+      { name: "Virtuos Ghost (Arcane d'Ampli)", urlName: "virtuos_ghost", cost: 10000 },
+      { name: "Virtuos Shadow (Arcane d'Ampli)", urlName: "virtuos_shadow", cost: 10000 },
+      { name: "Magus Vigor (Arcane)", urlName: "magus_vigor", cost: 10000 },
+      { name: "Magus Cadence (Arcane)", urlName: "magus_cadence", cost: 10000 },
+      { name: "Magus Replenish (Arcane)", urlName: "magus_replenish", cost: 10000 },
+      { name: "Magus Cloud (Arcane)", urlName: "magus_cloud", cost: 10000 }
     ]
   },
   {
@@ -492,7 +555,19 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Magus Lockdown (Arcane)", urlName: "magus_lockdown", cost: 10000 },
-      { name: "Magus Melt (Arcane)", urlName: "magus_melt", cost: 10000 }
+      { name: "Magus Melt (Arcane)", urlName: "magus_melt", cost: 10000 },
+      { name: "Magus Repair (Arcane)", urlName: "magus_repair", cost: 10000 },
+      { name: "Magus Anomaly (Arcane)", urlName: "magus_anomaly", cost: 10000 },
+      { name: "Magus Drive (Arcane)", urlName: "magus_drive", cost: 10000 },
+      { name: "Magus Firewall (Arcane)", urlName: "magus_firewall", cost: 10000 },
+      { name: "Virtuos Trojan (Arcane d'Ampli)", urlName: "virtuos_trojan", cost: 10000 },
+      { name: "Virtuos Surge (Arcane d'Ampli)", urlName: "virtuos_surge", cost: 10000 },
+      { name: "Virtuos Forge (Arcane d'Ampli)", urlName: "virtuos_forge", cost: 10000 },
+      { name: "Virtuos Spike (Arcane d'Ampli)", urlName: "virtuos_spike", cost: 10000 },
+      { name: "Pax Bolt (Arcane Kitgun)", urlName: "pax_bolt", cost: 20000 },
+      { name: "Pax Charge (Arcane Kitgun)", urlName: "pax_charge", cost: 20000 },
+      { name: "Pax Soar (Arcane Kitgun)", urlName: "pax_soar", cost: 20000 },
+      { name: "Pax Seeker (Arcane Kitgun)", urlName: "pax_seeker", cost: 20000 }
     ]
   },
   {
@@ -502,7 +577,17 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Molt Augmented (Arcane)", urlName: "molt_augmented", cost: 10000 },
-      { name: "Molt Efficiency (Arcane)", urlName: "molt_efficiency", cost: 10000 }
+      { name: "Molt Efficiency (Arcane)", urlName: "molt_efficiency", cost: 10000 },
+      { name: "Molt Reconstruct (Arcane)", urlName: "molt_reconstruct", cost: 10000 },
+      { name: "Molt Vigor (Arcane)", urlName: "molt_vigor", cost: 10000 },
+      { name: "Emergence Dissipate (Arcane)", urlName: "emergence_dissipate", cost: 10000 },
+      { name: "Emergence Savior (Arcane)", urlName: "emergence_savior", cost: 10000 },
+      { name: "Emergence Renew (Arcane)", urlName: "emergence_renew", cost: 10000 },
+      { name: "Fractal Reset (Arcane)", urlName: "fractal_reset", cost: 10000 },
+      { name: "Cascadia Flare (Arcane)", urlName: "cascadia_flare", cost: 10000 },
+      { name: "Cascadia Overcharge (Arcane)", urlName: "cascadia_overcharge", cost: 10000 },
+      { name: "Cascadia Empowered (Arcane)", urlName: "cascadia_empowered", cost: 10000 },
+      { name: "Cascadia Accuracy (Arcane)", urlName: "cascadia_accuracy", cost: 10000 }
     ]
   },
   {
@@ -512,7 +597,11 @@ export const SYNDICATES: Syndicate[] = [
     maxStanding: 132000,
     exchangeItems: [
       { name: "Melee Influence (Arcane)", urlName: "melee_influence", cost: 7500 },
-      { name: "Melee Exposure (Arcane)", urlName: "melee_exposure", cost: 7500 }
+      { name: "Melee Exposure (Arcane)", urlName: "melee_exposure", cost: 7500 },
+      { name: "Melee Animosity (Arcane)", urlName: "melee_animosity", cost: 7500 },
+      { name: "Melee Retaliation (Arcane)", urlName: "melee_retaliation", cost: 7500 },
+      { name: "Melee Fortification (Arcane)", urlName: "melee_fortification", cost: 7500 },
+      { name: "Melee Vortex (Arcane)", urlName: "melee_vortex", cost: 7500 }
     ]
   }
 ];
